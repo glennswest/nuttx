@@ -1,0 +1,6 @@
+cwd=$(pwd)
+export DEVKITPRO=${cwd}/devkitPro
+export DEVKITARM=${DEVKITPRO}/devkitARM
+export PATH=${cwd}/bin:${DEVKITARM}/bin:$PATH
+export CONFIGS=${cwd}/nuttx/configs
+bash

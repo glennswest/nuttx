@@ -1,0 +1,3 @@
+cp $CONFIGS/arduino-due/nsh/Make.defs nuttx/.
+cp $CONFIGS/arduino-due/nsh/defconfig nuttx/.config
+cp $CONFIGS/arduino-due/nsh/setenv.sh nuttx/setenv.sh
