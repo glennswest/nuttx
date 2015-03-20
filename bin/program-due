@@ -1,0 +1,2 @@
+../bin/bossac --reset -U false -e -w -v -b nuttx.bin
+

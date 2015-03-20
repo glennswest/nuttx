@@ -3,4 +3,5 @@ export DEVKITPRO=${cwd}/devkitPro
 export DEVKITARM=${DEVKITPRO}/devkitARM
 export PATH=${cwd}/bin:${DEVKITARM}/bin:$PATH
 export CONFIGS=${cwd}/nuttx/configs
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 bash
