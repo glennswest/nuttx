@@ -82,12 +82,14 @@
 #  error "HSMCI support requires CONFIG_SAMV7_XDMAC"
 #endif
 
-/* System Bus Interfaces
- * REVISIT: The SAMV71 supports only a single APB
- */
+/* System Bus Interfaces */
 
-#define HSMCI_SYSBUS_IF  DMACH_FLAG_PERIPHAHB_AHB_IF0
-#define MEMORY_SYSBUS_IF DMACH_FLAG_MEMAHB_AHB_IF0
+#ifdef CONFIG_ARCH_CHIP_SAMV71
+#  define HSMCI_SYSBUS_IF  DMACH_FLAG_PERIPHAHB_AHB_IF1
+#  define MEMORY_SYSBUS_IF DMACH_FLAG_MEMAHB_AHB_IF0
+#else
+#  error Missing bus interface definitions
+#endif
 
 #ifndef CONFIG_SCHED_WORKQUEUE
 #  error "Callback support requires CONFIG_SCHED_WORKQUEUE"
@@ -116,16 +118,12 @@
 #  endif
 #endif
 
-/* There is some unresolved issue with the SAMV7D3 DMA.  TX DMA is currently
+/* There is some unresolved issue with the SAMV7 DMA.  TX DMA is currently
  * disabled.
  */
 
-#undef HSCMI_NORXDMA             /* Define to disable RX DMA */
-#undef HSCMI_NOTXDMA             /* Define to disable TX DMA */
-
-#ifdef ATSAMV7D3
-#  define HSCMI_NOTXDMA 1        /* Disabled */
-#endif
+#undef  HSCMI_NORXDMA              /* Define to disable RX DMA */
+#define HSCMI_NOTXDMA            1 /* Define to disable TX DMA */
 
 /* Timing */
 
@@ -291,10 +289,12 @@ struct sam_hsmciregs_s
   uint32_t argr;  /* Argument Register */
   uint32_t blkr;  /* Block Register */
   uint32_t cstor; /* Completion Signal Timeout Register */
+#if 0 /* Reading these can cause loss of response data */
   uint32_t rsp0;  /* Response Register 0 */
   uint32_t rsp1;  /* Response Register 1 */
   uint32_t rsp2;  /* Response Register 2 */
   uint32_t rsp3;  /* Response Register 3 */
+#endif
   uint32_t sr;    /* Status Register */
   uint32_t imr;   /* Interrupt Mask Register */
   uint32_t dma;   /* DMA Configuration Register */
@@ -907,10 +907,12 @@ static void sam_hsmcisample(struct sam_dev_s *priv,
   regs->argr  = sam_getreg(priv, SAM_HSMCI_ARGR_OFFSET);
   regs->blkr  = sam_getreg(priv, SAM_HSMCI_BLKR_OFFSET);
   regs->cstor = sam_getreg(priv, SAM_HSMCI_CSTOR_OFFSET);
+#if 0 /* Reading these can cause loss of response data */
   regs->rsp0  = sam_getreg(priv, SAM_HSMCI_RSPR0_OFFSET);
   regs->rsp1  = sam_getreg(priv, SAM_HSMCI_RSPR1_OFFSET);
   regs->rsp2  = sam_getreg(priv, SAM_HSMCI_RSPR2_OFFSET);
   regs->rsp3  = sam_getreg(priv, SAM_HSMCI_RSPR3_OFFSET);
+#endif
   regs->sr    = sam_getreg(priv, SAM_HSMCI_SR_OFFSET);
   regs->imr   = sam_getreg(priv, SAM_HSMCI_IMR_OFFSET);
   regs->dma   = sam_getreg(priv, SAM_HSMCI_DMA_OFFSET);
@@ -939,10 +941,12 @@ static void sam_hsmcidump(struct sam_dev_s *priv,
   fdbg("    ARGR[%08x]: %08x\n", priv->base + SAM_HSMCI_ARGR_OFFSET,  regs->argr);
   fdbg("    BLKR[%08x]: %08x\n", priv->base + SAM_HSMCI_BLKR_OFFSET,  regs->blkr);
   fdbg("   CSTOR[%08x]: %08x\n", priv->base + SAM_HSMCI_CSTOR_OFFSET, regs->cstor);
+#if 0 /* Reading these can cause loss of response data */
   fdbg("   RSPR0[%08x]: %08x\n", priv->base + SAM_HSMCI_RSPR0_OFFSET, regs->rsp0);
   fdbg("   RSPR1[%08x]: %08x\n", priv->base + SAM_HSMCI_RSPR1_OFFSET, regs->rsp1);
   fdbg("   RSPR2[%08x]: %08x\n", priv->base + SAM_HSMCI_RSPR2_OFFSET, regs->rsp2);
   fdbg("   RSPR3[%08x]: %08x\n", priv->base + SAM_HSMCI_RSPR3_OFFSET, regs->rsp3);
+#endif
   fdbg("      SR[%08x]: %08x\n", priv->base + SAM_HSMCI_SR_OFFSET,    regs->sr);
   fdbg("     IMR[%08x]: %08x\n", priv->base + SAM_HSMCI_IMR_OFFSET,   regs->imr);
   fdbg("     DMA[%08x]: %08x\n", priv->base + SAM_HSMCI_DMA_OFFSET,   regs->dma);
@@ -1107,7 +1111,7 @@ static inline void sam_cmdsample2(struct sam_dev_s *priv, int index,
  * Name: sam_cmddump
  *
  * Description:
- *   Dump all comand/response register data
+ *   Dump all command/response register data
  *
  ****************************************************************************/
 
@@ -2475,6 +2479,7 @@ static int sam_recvlong(FAR struct sdio_dev_s *dev, uint32_t cmd, uint32_t rlong
 
   if ((priv->wkupevent & SDIOWAIT_TIMEOUT) != 0)
     {
+      fdbg("ERROR: timeout\n");
       ret = -EINVAL;
     }
 
@@ -2482,6 +2487,7 @@ static int sam_recvlong(FAR struct sdio_dev_s *dev, uint32_t cmd, uint32_t rlong
 
   else if ((priv->wkupevent & SDIOWAIT_ERROR) != 0)
     {
+      fdbg("ERROR: Other error\n");
       ret = -EIO;
     }
 
@@ -2612,9 +2618,10 @@ static sdio_eventset_t sam_eventwait(FAR struct sdio_dev_s *dev,
 
   /* Since interrupts not been enabled to this point, any relevant events
    * are pending and should not yet have occurred.
+   * REVISIT: Not true.  DMA interrupts are enabled.
    */
 
-  DEBUGASSERT(priv->waitevents != 0 && priv->wkupevent == 0);
+  // DEBUGASSERT(priv->waitevents != 0 && priv->wkupevent == 0);
 
   /* Now enable event-related interrupts. If the events are pending, they
    * may happen immediately here before entering the loop.
@@ -2924,8 +2931,9 @@ static int sam_dmasendsetup(FAR struct sdio_dev_s *dev,
    */
 
   regval    = sam_getreg(priv, SAM_HSMCI_BLKR_OFFSET);
-  nblocks   = ((regval &  HSMCI_BLKR_BCNT_SHIFT) >> HSMCI_BLKR_BCNT_SHIFT);
+  nblocks   = ((regval &  HSMCI_BLKR_BCNT_MASK) >> HSMCI_BLKR_BCNT_SHIFT);
   blocksize = ((regval &  HSMCI_BLKR_BLKLEN_MASK) >> HSMCI_BLKR_BLKLEN_SHIFT);
+
   DEBUGASSERT(nblocks > 0 && blocksize > 0 && (blocksize & 3) == 0);
 
   /* Physical address of the HSCMI source register, either the TDR (for

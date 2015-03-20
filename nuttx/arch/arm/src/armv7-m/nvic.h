@@ -224,7 +224,7 @@
 #define NVIC_DCISW_OFFSET               0x0f60 /* D-Cache Invalidate by Set-way (Cortex-M7) */
 #define NVIC_DCCMVAU_OFFSET             0x0f64 /* D-Cache Clean by MVA to PoU (Cortex-M7) */
 #define NVIC_DCCMVAC_OFFSET             0x0f68 /* D-Cache Clean by MVA to PoC (Cortex-M7) */
-#define NVIC_DCCSW_OFFSET               0x0f62 /* D-Cache Clean by Set-way (Cortex-M7) */
+#define NVIC_DCCSW_OFFSET               0x0f6c /* D-Cache Clean by Set-way (Cortex-M7) */
 #define NVIC_DCCIMVAC_OFFSET            0x0f70 /* D-Cache Clean and Invalidate by MVA to PoC (Cortex-M7) */
 #define NVIC_DCCISW_OFFSET              0x0f74 /* D-Cache Clean and Invalidate by Set-way (Cortex-M7) */
 #define NVIC_ITCMCR_OFFSET              0x0f90 /* Instruction Tightly-Coupled Memory Control Register */
@@ -616,7 +616,7 @@
 /* Cache Size Selection Register (Cortex-M7) */
 
 #define NVIC_CSSELR_IND                 (1 << 0)  /* Bit 0: Selects either instruction or data cache */
-#  define NVIC_CSSELR_IND_ICACHE        (0 << 0)  /*   0=Instructin Cache */
+#  define NVIC_CSSELR_IND_ICACHE        (0 << 0)  /*   0=Instruction Cache */
 #  define NVIC_CSSELR_IND_DCACHE        (1 << 0)  /*   1=Data Cache */
 
 #define NVIC_CSSELR_LEVEL_SHIFT         (1)       /* Bit 1-3: Selects cache level */
