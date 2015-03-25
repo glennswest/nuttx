@@ -383,7 +383,9 @@
 
 /* Universal Asynchronous Receiver Transceiver (UART) */
 
+#ifndef GPIO_UART0_RXD
 #define GPIO_UART0_RXD     (GPIO_PERIPHA | GPIO_CFG_DEFAULT | GPIO_PORT_PIOA | GPIO_PIN8)
+#endif
 #define GPIO_UART0_TXD     (GPIO_PERIPHA | GPIO_CFG_DEFAULT | GPIO_PORT_PIOA | GPIO_PIN9)
 
 /* Universal Synchronous Asynchronous Receiver Transmitter (USART) */
