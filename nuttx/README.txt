@@ -1284,6 +1284,8 @@ nuttx
  |   |   `- README.txt
  |   |- samd20-xplained/
  |   |   `- README.txt
+ |   |- samd21-xplained/
+ |   |   `- README.txt
  |   |- saml21-xplained/
  |   |   `- README.txt
  |   |- sam3u-ek/
@@ -1329,6 +1331,8 @@ nuttx
  |   |- sure-pic32mx/
  |   |   `- README.txt
  |   |- teensy-2.0/
+ |   |   `- README.txt
+ |   |- teensy-3.x/
  |   |   `- README.txt
  |   |- teensy-lc/
  |   |   `- README.txt

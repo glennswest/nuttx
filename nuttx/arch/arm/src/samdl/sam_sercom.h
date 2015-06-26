@@ -48,7 +48,7 @@
 #include "sam_config.h"
 #include "sam_periphclks.h"
 
-#if defined(CONFIG_ARCH_FAMILY_SAMD20)
+#if defined(CONFIG_ARCH_FAMILY_SAMD20) || defined(CONFIG_ARCH_FAMILY_SAMD21)
 #  include "chip/samd_sercom.h"
 #elif defined(CONFIG_ARCH_FAMILY_SAML21)
 #  include "chip/saml_sercom.h"
@@ -130,7 +130,7 @@ static inline void sercom_enable(int sercom)
  *
  ****************************************************************************/
 
-#ifdef CONFIG_ARCH_FAMILY_SAMD20
+#if defined(CONFIG_ARCH_FAMILY_SAMD20) || defined(CONFIG_ARCH_FAMILY_SAMD21)
 void sercom_coreclk_configure(int sercom, int gclkgen, bool wrlock);
 #endif
 
@@ -148,7 +148,7 @@ void sercom_coreclk_configure(int sercom, int gclkgen, bool wrlock);
  *
  ****************************************************************************/
 
-void sercom_slowclk_configure(int gclkgen);
+void sercom_slowclk_configure(int sercom, int gclkgen);
 
 #undef EXTERN
 #if defined(__cplusplus)

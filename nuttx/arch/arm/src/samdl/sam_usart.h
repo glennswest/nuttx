@@ -49,7 +49,7 @@
 
 #include "up_arch.h"
 
-#if defined(CONFIG_ARCH_FAMILY_SAMD20)
+#if defined(CONFIG_ARCH_FAMILY_SAMD20) || defined(CONFIG_ARCH_FAMILY_SAMD21)
 #  include "chip/samd_usart.h"
 #elif defined(CONFIG_ARCH_FAMILY_SAML21)
 #  include "chip/saml_usart.h"
@@ -91,6 +91,7 @@ struct sam_usart_config_s
   uint8_t bits;       /* Number of bits (5-9) */
   uint8_t irq;        /* SERCOM IRQ number */
   uint8_t gclkgen;    /* Source GCLK generator */
+  uint8_t slowgen;    /* Slow GCLK generator */
   bool stopbits2;     /* True: Configure with 2 stop bits instead of 1 */
   uint32_t baud;      /* Configured baud */
   port_pinset_t pad0; /* Pin configuration for PAD0 */
@@ -119,7 +120,7 @@ static inline bool usart_syncbusy(const struct sam_usart_config_s * const config
 {
 #if defined(CONFIG_ARCH_FAMILY_SAMD20)
   return ((getreg16(config->base + SAM_USART_STATUS_OFFSET) & USART_STATUS_SYNCBUSY) != 0);
-#elif defined(CONFIG_ARCH_FAMILY_SAML21)
+#elif defined(CONFIG_ARCH_FAMILY_SAMD21) || defined(CONFIG_ARCH_FAMILY_SAML21)
   return ((getreg16(config->base + SAM_USART_SYNCBUSY_OFFSET) & USART_SYNCBUSY_ALL) != 0);
 #else
 #  error Unrecognized SAMD/L family

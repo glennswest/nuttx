@@ -27,17 +27,13 @@ STATUS/ISSUES
   - Since this port is a leverage of the SAMD20 Xplained port, some of the
     STATUS/ISSUES in the SAMD20 Xplained README.txt may apply here as well.
 
-  - 2015-5-25: The basic port is running but using OSC16M and with a CPU
-    frequency of only 16MHz.  Attempts to use the DFLL to get the 48MHz
-    has so far been unsuccessful.  I can't find any example in the Atmel
-    ASF files the run at 48MHz with the DFLL (in closed loop mode) or
-    with the DPLL.
+  - 2015-5-26: The basic port is running at 48MHz (using 32.768 XTAL input
+    and the digital frequency locked loop).  The basic NuttShell (NSH)
+    configuration is working well with the serial console provided by
+    SERCOM4 as 115200 8N1.
 
-    If I enable the DFLL now in open loop mode.  It kind of works but with
-    a some random CPU frequenycy (soemthing like 13.7MHz).  Of course the
-    results in a crazy UART baud so that is not usable.  If I try to enable
-    the DFLL in closed loop mode, it hangs waiting for the DFLL to become
-    ready.  I have not tried the DPLL.
+  - 2015-6-14: Added a DMAC driver.  There is no way to verify it at present
+    and, hence, depends upon CONFIG_EXPERIMENTAL=y
 
 Modules
 =======
@@ -50,8 +46,9 @@ Modules
   2) OLED1  - An OLED plus 3 additional switches and 3 additional LEDs
   3) PROTO1 - A prototyping board with logic on board (other than power-
               related logic).
+  4) And others.  See http://www.atmel.com/products/microcontrollers/avr/xplained.aspx
 
-Some of these are discussed further below.
+  Some of these are discussed further below.
 
   I/O1
   ----
@@ -594,28 +591,30 @@ SAML21 Xplained Pro-specific Configuration Options
 
   Individual subsystems can be enabled:
 
-    CONFIG_SAMDL_WDT     - Watchdog Timer"
-    CONFIG_SAMDL_RTC     - Real Time Counter"
-    CONFIG_SAMDL_NVMCTRL - Non-Volatile Memory Controller"
-    CONFIG_SAMDL_EVSYS   - Event System"
-    CONFIG_SAMDL_SERCOM0 - Serial Communication Interface 0"
-    CONFIG_SAMDL_SERCOM1 - Serial Communication Interface 1"
-    CONFIG_SAMDL_SERCOM2 - Serial Communication Interface 2"
-    CONFIG_SAMDL_SERCOM3 - Serial Communication Interface 3"
-    CONFIG_SAMDL_SERCOM4 - Serial Communication Interface 4"
-    CONFIG_SAMDL_SERCOM5 - Serial Communication Interface 5"
-    CONFIG_SAMDL_TC0     - Timer/Counter 0"
-    CONFIG_SAMDL_TC1     - Timer/Counter 1"
-    CONFIG_SAMDL_TC2     - Timer/Counter 2"
-    CONFIG_SAMDL_TC3     - Timer/Counter 3"
-    CONFIG_SAMDL_TC4     - Timer/Counter 4"
-    CONFIG_SAMDL_TC5     - Timer/Counter 5"
-    CONFIG_SAMDL_TC6     - Timer/Counter 6"
-    CONFIG_SAMDL_TC7     - Timer/Counter 6"
-    CONFIG_SAMDL_ADC     - Analog-to-Digital Converter"
-    CONFIG_SAMDL_AC      - Analog Comparator"
-    CONFIG_SAMDL_DAC     - Digital-to-Analog Converter"
-    CONFIG_SAMDL_PTC     - Peripheral Touch Controller"
+    CONFIG_SAMDL_AC      - Analog Comparator
+    CONFIG_SAMDL_ADC     - Analog-to-Digital Converter
+    CONFIG_SAMDL_DAC     - Digital-to-Analog Converter
+    CONFIG_SAMDL_DMAC    - Analog Comparator
+    CONFIG_SAMDL_EVSYS   - Event System
+    CONFIG_SAMDL_NVMCTRL - Non-Volatile Memory Controller
+    CONFIG_SAMDL_PTC     - Peripheral Touch Controller
+    CONFIG_SAMDL_RTC     - Real Time Counter
+    CONFIG_SAMDL_SERCOM0 - Serial Communication Interface 0
+    CONFIG_SAMDL_SERCOM1 - Serial Communication Interface 1
+    CONFIG_SAMDL_SERCOM2 - Serial Communication Interface 2
+    CONFIG_SAMDL_SERCOM3 - Serial Communication Interface 3
+    CONFIG_SAMDL_SERCOM4 - Serial Communication Interface 4
+    CONFIG_SAMDL_SERCOM5 - Serial Communication Interface 5
+    CONFIG_SAMDL_TCC0    - Timer/Counter 0 for Control
+    CONFIG_SAMDL_TCC1    - Timer/Counter 1 for Control
+    CONFIG_SAMDL_TCC2    - Timer/Counter 2 for Control
+    CONFIG_SAMDL_TC3     - Timer/Counter 3
+    CONFIG_SAMDL_TC4     - Timer/Counter 4
+    CONFIG_SAMDL_TC5     - Timer/Counter 5
+    CONFIG_SAMDL_TC6     - Timer/Counter 6
+    CONFIG_SAMDL_TC7     - Timer/Counter 6
+    CONFIG_SAMDL_USB     - USB device or host
+    CONFIG_SAMDL_WDT     - Watchdog Timer
 
   Some subsystems can be configured to operate in different ways. The drivers
   need to know how to configure the subsystem.

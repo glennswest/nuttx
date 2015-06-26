@@ -531,6 +531,11 @@ configs/samd20-xplained
   board features the ATSAMD20J18A MCU (Cortex-M0+ with 256KB of FLASH and
   32KB of SRAM).
 
+configs/samd21-xplained
+  The port of NuttX to the Atmel SAMD21-Xplained Pro development board.  This
+  board features the ATSAMD21J18A MCU (Cortex-M0+ with 256KB of FLASH and
+  32KB of SRAM).
+
 configs/sam3u-ek
   The port of NuttX to the Atmel SAM3U-EK development board.
 
@@ -606,6 +611,21 @@ configs/teensy-2.0
   This is the port of NuttX to the PJRC Teensy++ 2.0 board.  This board is
   developed by http://pjrc.com/teensy/.  The Teensy++ 2.0 is based
   on an Atmel AT90USB1286 MCU.
+
+configs/teensy-3.x
+  This is the port of NuttX to the Teensy-3.1 from PJRC
+  (https://www.pjrc.com/).  The Teensy-3.1 features the Freescale
+  MK30DX256VLH7 chip (now NXP).  The MK30DX256VLH7 is a 64-pin Cortex-M4
+  running at 72MHz.  It has 256KiB of program FLASH memory and 64KiB of
+  SRAM.  For more information about the Teensy 3.1, see
+
+    https://www.pjrc.com/teensy/teensy31.html
+    https://www.pjrc.com/store/teensy31.html
+
+  This board configuration can also be used with the older Teensy-3.0.  The
+  Teensy-3.0 has the same schematic (although some pins are not used on the
+  Teensy-3.0).  the primary difference is that the Teensy 3.0 has a
+  MK30DX128VLH5 with slightly less capability.
 
 configs/teensy-lc
   This is the port of nuttx for the Teensy LC board.  The Teensy LC
