@@ -909,10 +909,14 @@ examples/nx
       function with a prototype like:
 
       #ifdef CONFIG_NX_LCDDRIVER
-      FAR struct lcd_dev_s *up_nxdrvinit(unsigned int devno);
+      FAR struct lcd_dev_s *board_graphics_setup(unsigned int devno);
       #else
-      FAR struct fb_vtable_s *up_nxdrvinit(unsigned int devno);
+      FAR struct fb_vtable_s *board_graphics_setup(unsigned int devno);
       #endif
+
+      and must also define: CONFIG_LIB_BOARDCTL=y and
+      CONFIG_BOARDCTL_GRAPHICS=y so that the boardctl() interface
+      will be available in order to access this function.
 
   This test can be performed with either the single-user version of
   NX or with the multiple user version of NX selected with CONFIG_NX_MULTIUSER.
@@ -982,10 +986,14 @@ examples/nxterm
       function with a prototype like:
 
       #ifdef CONFIG_NX_LCDDRIVER
-      FAR struct lcd_dev_s *up_nxdrvinit(unsigned int devno);
+      FAR struct lcd_dev_s *board_graphics_setup(unsigned int devno);
       #else
-      FAR struct fb_vtable_s *up_nxdrvinit(unsigned int devno);
+      FAR struct fb_vtable_s *board_graphics_setup(unsigned int devno);
       #endif
+
+      and must also define: CONFIG_LIB_BOARDCTL=y and
+      CONFIG_BOARDCTL_GRAPHICS=y so that the boardctl() interface
+      will be available in order to access this function.
 
     CONFIG_EXAMPLES_NXCON_MINOR -- The NX console device minor number.
       Default is 0 corresponding to /dev/nxterm0
@@ -1054,10 +1062,14 @@ examplex/nxhello
       function with a prototype like:
 
       #ifdef CONFIG_NX_LCDDRIVER
-      FAR struct lcd_dev_s *up_nxdrvinit(unsigned int devno);
+      FAR struct lcd_dev_s *board_graphics_setup(unsigned int devno);
       #else
-      FAR struct fb_vtable_s *up_nxdrvinit(unsigned int devno);
+      FAR struct fb_vtable_s *board_graphics_setup(unsigned int devno);
       #endif
+
+      and must also define: CONFIG_LIB_BOARDCTL=y and
+      CONFIG_BOARDCTL_GRAPHICS=y so that the boardctl() interface
+      will be available in order to access this function.
 
 examples/nximage
 ^^^^^^^^^^^^^^^^
@@ -1090,10 +1102,14 @@ examples/nximage
       function with a prototype like:
 
       #ifdef CONFIG_NX_LCDDRIVER
-      FAR struct lcd_dev_s *up_nxdrvinit(unsigned int devno);
+      FAR struct lcd_dev_s *board_graphics_setup(unsigned int devno);
       #else
-      FAR struct fb_vtable_s *up_nxdrvinit(unsigned int devno);
+      FAR struct fb_vtable_s *board_graphics_setup(unsigned int devno);
       #endif
+
+      and must also define: CONFIG_LIB_BOARDCTL=y and
+      CONFIG_BOARDCTL_GRAPHICS=y so that the boardctl() interface
+      will be available in order to access this function.
 
     How was that run-length encoded image produced?
 
@@ -1148,10 +1164,14 @@ examplex/nxlines
       function with a prototype like:
 
       #ifdef CONFIG_NX_LCDDRIVER
-      FAR struct lcd_dev_s *up_nxdrvinit(unsigned int devno);
+      FAR struct lcd_dev_s *board_graphics_setup(unsigned int devno);
       #else
-      FAR struct fb_vtable_s *up_nxdrvinit(unsigned int devno);
+      FAR struct fb_vtable_s *board_graphics_setup(unsigned int devno);
       #endif
+
+      and must also define: CONFIG_LIB_BOARDCTL=y and
+      CONFIG_BOARDCTL_GRAPHICS=y so that the boardctl() interface
+      will be available in order to access this function.
 
     CONFIG_NSH_BUILTIN_APPS - Build the NX lines examples as an NSH built-in
       function.
@@ -1203,10 +1223,14 @@ examples/nxtext
       function with a prototype like:
 
       #ifdef CONFIG_NX_LCDDRIVER
-      FAR struct lcd_dev_s *up_nxdrvinit(unsigned int devno);
+      FAR struct lcd_dev_s *board_graphics_setup(unsigned int devno);
       #else
-      FAR struct fb_vtable_s *up_nxdrvinit(unsigned int devno);
+      FAR struct fb_vtable_s *board_graphics_setup(unsigned int devno);
       #endif
+
+      and must also define: CONFIG_LIB_BOARDCTL=y and
+      CONFIG_BOARDCTL_GRAPHICS=y so that the boardctl() interface
+      will be available in order to access this function.
 
     CONFIG_EXAMPLES_NXTEXT_BMCACHE - The maximum number of characters that
       can be put in the background window.  Default is 128.
@@ -1753,7 +1777,7 @@ examples/tiff
 examples/timer
 ^^^^^^^^^^^^^^
 
-  This is a simple test of the timer driver (see include/nuttx/timer.h).
+  This is a simple test of the timer driver (see include/nuttx/timers/timer.h).
 
   Dependencies:
     CONFIG_TIMER - The timer driver must be selected
@@ -1809,12 +1833,13 @@ examples/touchscreen
 
     CONFIG_EXAMPLES_TOUCHSREEN=y
 
-  The board-specific logic must provide the following interfaces that will
-  be called by the example in order to initialize and uninitialize the
-  touchscreen hardware:
+  This example code will call boardctl() to setup the touchscreen driver
+  for texting.  The implementation of boardctl() will require that board-
+  specific logic  provide the following interfaces that will be called by
+  the boardctl() in order to initialize and uninitialize the touchscreen hardware:
 
-    int arch_tcinitialize(int minor);
-    int arch_tcuninitialize(void);
+    int board_tsc_setup(int minor);
+    void board_tsc_teardown(void);
 
 examples/udp
 ^^^^^^^^^^^^
@@ -1826,6 +1851,27 @@ examples/udp
   netutils libraries in the defconfig file:
 
     CONFIG_NETUTILS_NETLIB=y
+
+examples/unionfs
+^^^^^^^^^^^^^^^^
+
+  This is at trivial test of the Union File System.  See
+  nuttx/fs/unionfs/README.txt.  Dependencies:
+
+    CONFIG_DISABLE_MOUNTPOINT          - Mountpoint support must not be disabled
+    CONFIG_NFILE_DESCRIPTORS < 4       - Some file descriptors must be allocated
+    CONFIG_FS_ROMFS                    - ROMFS support is required
+    CONFIG_FS_UNIONFS                  - Union File System support is required
+
+  Configuration options.  Use the defaults if you are unsure of what you are doing:
+ 
+    CONFIG_EXAMPLES_UNIONFS            - Enables the example
+    CONFIG_EXAMPLES_UNIONFS_MOUNTPT    - Mountpoint path for the Union File System
+    CONFIG_EXAMPLES_UNIONFS_TMPA       - Temporary mount point for file system 1
+    CONFIG_EXAMPLES_UNIONFS_TMPB       - Temporary mount point for file system 2
+    CONFIG_EXAMPLES_UNIONFS_RAMDEVNO_A - ROMFS file system 1 RAM disk device number
+    CONFIG_EXAMPLES_UNIONFS_RAMDEVNO_B - ROMFS file system 2 RAM disk device number
+    CONFIG_EXAMPLES_UNIONFS_SECTORSIZE - ROM disk sector size.
 
 examples/usbserial
 ^^^^^^^^^^^^^^^^^^

@@ -1217,9 +1217,94 @@
 	  standard post-pended prefix value, rather than the full 128-bit netmask
 	  (2015-02-06).
 
-7.9 2015-xx-xx Gregory Nutt <gnutt@nuttx.org>
+7.9 2015-04-14 Gregory Nutt <gnutt@nuttx.org>
 
 	* apps/examples/ostest: Improved error checking for sem_timedwait()
 	  from Juha Niskanen (2015-02-20).
 	* apps/netutils/Kconfig, Make.defs, and pppd/: Add a PPP daemon.  From
 	  Max Neklyudov (2015-03-11).
+	* Rename arch_nshinitialize() to board_app_initialize() (2015-03-30).
+	* apps/nshlib:  NSH initialization now calls boardctl(BOARDIOC_INIT)
+	  instead of board_app_initaliaze().   Remove support for
+	  CONFIG_NSH_ARCHMAC.  It is not used and there are better ways to do
+	  that operation (2015-03-31).
+	* apps/examples/touchscreen:  No longer calls arch_tcinitialize() or
+	  arch_tcuninitialize().  Instead the new OS interface boardctl() is
+	  called to perform these test operations on the touchscreen driver
+	  (2015-03-31).
+	* apps/examples/adc: Change apps/examples/adc to that is now calls
+	  boardctl() instead of adc_devinit() in order to initalize the ADC
+	  device(2015-03-31).
+	* apps/examples/pwm/: Replace calls to pwm_devinit() in
+	  apps/examples/pwm with calls to boardctl() (2015-03-31).
+	* apps/examples/:  More renaming: up_lcdinitialize->board_lcd_initialize,
+	  up_lcdgetdev->board_lcd_getdev, up_lcduninitialize->board_lcd_uninitialize
+	  (2015-04-04).
+	* apps/examples/nxlines/: Add the new 'capped' parameter to nx_drawline()
+	  calls (2015-04-05).
+	* apps/modbus/tcp:  Fix some complile problems when TCP is enabled
+	  (2015-04-06).
+	* apps/system: Clean up Kconfig menus.  The way it worked before, it was
+	  difficult to see what was enabled and what was not.  menus replaced
+	  with menuconfig (2015-04-07).
+	* apps/examples/ostest/sigprocmask.c: Add a simple test of sigprocmask,
+	  sighold, and sigrelse (2015-04-09).
+	* apps/modbus: Includes extensions to support RTU master mode by
+	  Armink(383016632@qq.com):
+	  https://github.com/armink/FreeModbus_Slave-Master-RTT-STM32.  Ported
+	  to NuttX by Darcy Gong.
+	* apps/nshlib:  Allow NSH 'date' command with no hardware RTC.  Thisi
+	  command is useful without an RTC too.  Also, this permits testing on
+	  the simulator which never has an RTC (2015-04-11).
+	* apps/netutils/ppp: Make pppd PAP authentication optional.  From
+	  Brennan Ashton
+	* apps/examples/pppd:  Add PPPD test case.  Split out from
+	  apps/netutils/pppd by Brennan Ashton.
+	* apps/netutils/pppd: Spit up pppd utils.  From Brennan Ashton.
+	* apps/system/zoneinfo:  All logic to build timezone info.  Does not do
+	  much else yet (2015-04-14).
+
+7.10 2015-xx-xx Gregory Nutt <gnutt@nuttx.org>
+
+	* apps/system/zoneinfo:  Add logic to build a ROMFS file system
+	  containing the timezone data (2015-04-15).
+	* apps/nshlib/nsh_timcmds.c: Check return values from time functions
+	  (2015-04-15).
+	* apps/examples/nxlines:  Fix missing right bracket that causes
+	  compile error when CONFIG_NX_XYINPUT=y.  From Librae (2015-04-16).
+	* apps/examples: When boardctl() fails, need to print errno not the
+	  returned value which will always be -1 (2015-04-16).
+	* apps/examples: Correct use of the BOARDIOC_GRAPHICS_SETUP boardctl()
+	  call (2015-04-16).
+	* apps/examples/ltdc:  Add testing support for the STM32 LTDC's 2D
+	  DMA. From Marco Krahl (2015-04-16).
+	* apps/nshlib/: Fix handling of gmtime_r return value in time commands.
+	  gmtime_r returns a pointer, not an int (2015-04-21).
+	* apps/netutils/ntp: Fix mismatched sched_lock/unlock.  Noted by
+	  Juha Niskanen (2015-05-06).
+	* apps/examples:  Modify/simpify apps/examples build files.  From Roman
+	  Saveljev (2015-05-06).
+	* apps/nshlib/nsh_netinit.c and apps/examples/ustream/: Add poll
+	  support for Unix stream sockets.  From Jussi Kivilinna (2015-05-12).
+	* apps/examples/ostest: Add a test of nested signals.  There are no
+	  failures to handle signals but neither am I getting any nested
+	  signal handling (2015-05-12).
+	* apps/nshlib: Enhancements to NSH ifconfig for case of multi-link
+	  operation, TUN device and local connections.  From Max Neklyudov
+	  (2015-05-19).
+	* apps/nshlib: Enhanced output to NSH ping command from Max Neklyudov
+	  (2015-05-27).
+	* apps/examples/elf: Add configuration options to support building the
+	  hello++4 example that depends upon having uClibc++ available.  From
+	  Leo aloe3132 (2015-05-29).
+	* apps/platform/stm32f4discovery: Move up_cxxinitialize from
+	  nuttx/configs/stm32f4discovery/src to apps/platform/stm32f4discovery
+	  where it belongs (2015-05-29).
+	* apps/examples/elf/tests/helloxx: Add hello++5 to ELF example.  From
+	  Leo Aloe3132 (2015-06-01).
+	* apps/netutils/thttpd/ and apps/examples/thttpd/: Add support for using
+	  binfs/ instead of NXFLAT.  NXFLAT is probably the better solution but
+	  recently compiler changes make it unusable.  binfs or ELF are fallback
+	  binary formats.  This commit adds an option to use binfs (2015-06-02).
+	* apps/examples/unionfs: Add a test of the union file system to
+	  apps/examaples (2015-06-05).

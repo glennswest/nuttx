@@ -1,7 +1,7 @@
 /************************************************************************************************************
  * arch/arm/src/samv7/chip/sam_usbhs.h
  *
- *   Copyright (C) 2013 Gregory Nutt. All rights reserved.
+ *   Copyright (C) 2015 Gregory Nutt. All rights reserved.
  *   Author: Gregory Nutt <gnutt@nuttx.org>
  *
  * References:
@@ -232,7 +232,7 @@
 #define USBHS_DEVINT_UPRSM                 (1 << 6)          /* Bit 6:  Upstream Resume Interrupt */
 #define USBHS_DEVINT_PEP_SHIFT             (12)              /* Bits 12-23: Endpoint interrupts (1) */
 #define USBHS_DEVINT_PEP_MASK              (0xfff << USBHS_DEVINT_PEP_SHIFT)
-#  define USBHS_DEVINT_PEP(n)              (1 << +((n)+12))  /* Endpoint n Interrupt, n=0-11 (1) */
+#  define USBHS_DEVINT_PEP(n)              (1 << ((n)+12))   /* Endpoint n Interrupt, n=0-11 (1) */
 #  define USBHS_DEVINT_PEP0                (1 << 12)         /* Bit 12: Endpoint 0 Interrupt (1) */
 #  define USBHS_DEVINT_PEP1                (1 << 13)         /* Bit 13: Endpoint 1 Interrupt (1) */
 #  define USBHS_DEVINT_PEP2                (1 << 14)         /* Bit 14: Endpoint 2 Interrupt (1) */
@@ -295,7 +295,7 @@
 
 /* Device Endpoint Configuration Register */
 
-#define USBHS_DEVEPTCFG_ALLOC              (1 << 0)          /* Bit 0: Endpoint Memory Allocate */
+#define USBHS_DEVEPTCFG_ALLOC              (1 << 1)          /* Bit 1: Endpoint Memory Allocate */
 #define USBHS_DEVEPTCFG_EPBK_SHIFT         (2)               /* Bits 2-3: Endpoint Banks */
 #define USBHS_DEVEPTCFG_EPBK_MASK          (3 << USBHS_DEVEPTCFG_EPBK_SHIFT)
 #  define USBHS_DEVEPTCFG_EPBK(n)          ((uint32_t)((n)-1) << USBHS_DEVEPTCFG_EPBK_SHIFT)
@@ -711,7 +711,6 @@
 /* Host DMA Channel Address Register (32-bit address) */
 
 /* Host DMA Channel Control Register */
-#define USBHS_HSTDMACTRL_
 
 #define USBHS_HSTDMACTRL_CMD_SHIFT         (0)               /* Bits 0-1: Command */
 #define USBHS_HSTDMACTRL_CMD_MASK          (3 << USBHS_HSTDMACTRL_CMD_SHIFT)
@@ -747,28 +746,30 @@
 #define USBHS_CTRL_RDERRE                  (1 << 4)          /* Bit 4:  Remote Device Connection Error Interrupt Enable */
 #define USBHS_CTRL_FRZCLK                  (1 << 14)         /* Bit 14: Freeze USB Clock */
 #define USBHS_CTRL_USBE                    (1 << 15)         /* Bit 15: USBHS Enable */
-#define USBHS_CTRL_UIMOD                   (1 << 25)         /* Bit 25: USBHS Mode */
+#define USBHS_CTRL_UIMOD_MASK              (1 << 25)         /* Bit 25: USBHS Mode */
 #  define USBHS_CTRL_UIMOD_HOST            (0 << 25)         /*   0=Host mode */
-#  define USBHS_CTRL_UIMOD_DEVICE          (1 << 25)         /*   1= Device mode */
+#  define USBHS_CTRL_UIMOD_DEVICE          (1 << 25)         /*   1=Device mode */
 
 /* General Status Register */
 
 #define USBHS_SR_RDERRI                    (1 << 4)          /* Bit 4:  Remote Device Connection Error Interrupt (host mode) */
+#define USBHS_SR_VBUSRQ                    (1 << 9)          /* Bit 9:  VBus Request (host mode) */
 #define USBHS_SR_SPEED_SHIFT               (12)              /* Bits 12-13: Speed Status (device mode) */
 #define USBHS_SR_SPEED_MASK                (3 << USBHS_SR_SPEED_SHIFT)
-
-#define USBHS_SR_SPEED_FULL                (0 << USBHS_SR_SPEED_SHIFT) /* Full-Speed mode */
-#define USBHS_SR_SPEED_HIGH                (1 << USBHS_SR_SPEED_SHIFT) /* High-Speed mode */
-#define USBHS_SR_SPEED_LOW                 (2 << USBHS_SR_SPEED_SHIFT) /* Low-Speed mode */
+#  define USBHS_SR_SPEED_FULL              (0 << USBHS_SR_SPEED_SHIFT) /* Full-Speed mode */
+#  define USBHS_SR_SPEED_HIGH              (1 << USBHS_SR_SPEED_SHIFT) /* High-Speed mode */
+#  define USBHS_SR_SPEED_LOW               (2 << USBHS_SR_SPEED_SHIFT) /* Low-Speed mode */
 #define USBHS_SR_CLKUSABLE                 (1 << 14)         /* Bit 14: UTMI Clock Usable */
 
 /* General Status Clear Register */
 
 #define USBHS_SCR_RDERRIC                  (1 << 4)          /* Bit 4:  Remote Device Connection Error Interrupt Clear */
+#define USBHS_SCR_VBUSRQC                  (1 << 9)          /* Bit 9:   VBus Request Clear */
 
 /* General Status Set Register */
 
 #define USBHS_SFR_RDERRIS                  (1 << 4)          /* Bit 4:  Remote Device Connection Error Interrupt Set */
+#define USBHS_SFR_VBUSRQS                  (1 << 9)          /* Bit 9:  VBus Request Set */
 
 /************************************************************************************************************
  * Public Types

@@ -48,6 +48,8 @@
 #  include <apps/usbmonitor.h>
 #endif
 
+#include <nuttx/binfmt/elf.h>
+
 #include "stm32.h"
 
 #ifdef CONFIG_STM32_OTGFS
@@ -62,12 +64,12 @@
  */
 
 #ifdef HAVE_RTC_DRIVER
-#  include <nuttx/rtc.h>
+#  include <nuttx/timers/rtc.h>
 #  include "stm32_rtc.h"
 #endif
 
 /****************************************************************************
- * Pre-Processor Definitions
+ * Pre-processor Definitions
  ****************************************************************************/
 
 /****************************************************************************
@@ -151,6 +153,16 @@ int stm32_bringup(void)
           sdbg("ERROR: Failed to bind/register the RTC driver: %d\n", ret);
           return ret;
         }
+    }
+#endif
+
+#ifdef HAVE_ELF
+  /* Initialize the ELF binary loader */
+
+  ret = elf_initialize();
+  if (ret < 0)
+    {
+      sdbg("ERROR: Initialization of the ELF loader failed: %d\n", ret);
     }
 #endif
 

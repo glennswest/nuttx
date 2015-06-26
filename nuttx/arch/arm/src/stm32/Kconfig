@@ -394,6 +394,12 @@ config ARCH_CHIP_STM32F107VC
 	select STM32_STM32F10XX
 	select STM32_CONNECTIVITYLINE
 
+config ARCH_CHIP_STM32F205RG
+	bool "STM32F205RG"
+	select ARCH_CORTEXM3
+	select STM32_STM32F20XX
+	select STM32_STM32F205
+
 config ARCH_CHIP_STM32F207IG
 	bool "STM32F207IG"
 	select ARCH_CORTEXM3
@@ -405,6 +411,18 @@ config ARCH_CHIP_STM32F207ZE
 	select ARCH_CORTEXM3
 	select STM32_STM32F20XX
 	select STM32_STM32F207
+
+config ARCH_CHIP_STM32F302K6
+	bool "STM32F302K6"
+	select ARCH_CORTEXM4
+	select STM32_STM32F30XX
+	select ARCH_HAVE_FPU
+
+config ARCH_CHIP_STM32F302K8
+	bool "STM32F302K8"
+	select ARCH_CORTEXM4
+	select STM32_STM32F30XX
+	select ARCH_HAVE_FPU
 
 config ARCH_CHIP_STM32F302CB
 	bool "STM32F302CB"
@@ -746,6 +764,7 @@ config STM32_STM32F10XX
 	default n
 	select STM32_HAVE_SPI2 if STM32_HIGHDENSITY || STM32_MEDIUMDENSITY
 	select STM32_HAVE_SPI3 if STM32_HIGHDENSITY || STM32_MEDIUMDENSITY
+	select STM32_HAVE_RTC_COUNTER
 
 config STM32_VALUELINE
 	bool
@@ -857,6 +876,33 @@ config STM32_LOWDENSITY
 config STM32_STM32F20XX
 	bool
 	default n
+
+config STM32_STM32F205
+	bool
+	default n
+	select STM32_HAVE_OTGFS
+	select STM32_HAVE_USART3
+	select STM32_HAVE_UART4
+	select STM32_HAVE_UART5
+	select STM32_HAVE_USART6
+	select STM32_HAVE_TIM1
+	select STM32_HAVE_TIM5
+	select STM32_HAVE_TIM6
+	select STM32_HAVE_TIM7
+	select STM32_HAVE_TIM8
+	select STM32_HAVE_TIM9
+	select STM32_HAVE_TIM10
+	select STM32_HAVE_TIM11
+	select STM32_HAVE_TIM12
+	select STM32_HAVE_TIM13
+	select STM32_HAVE_TIM14
+	select STM32_HAVE_ADC2
+	select STM32_HAVE_ADC3
+	select STM32_HAVE_CAN1
+	select STM32_HAVE_CAN2
+	select STM32_HAVE_RNG
+	select STM32_HAVE_SPI2
+	select STM32_HAVE_SPI3
 
 config STM32_STM32F207
 	bool
@@ -1392,11 +1438,13 @@ config STM32_OTGFS
 	bool "OTG FS"
 	default n
 	depends on STM32_HAVE_OTGFS
+	select USBHOST_HAVE_ASYNCH if USBHOST
 
 config STM32_OTGHS
 	bool "OTG HS"
 	default n
 	depends on STM32_STM32F207 || STM32_STM32F40XX || STM32_STM32F429
+	select USBHOST_HAVE_ASYNCH if USBHOST
 
 config STM32_PWR
 	bool "PWR"
@@ -1648,6 +1696,13 @@ config STM32_I2C
 
 config STM32_CAN
 	bool
+
+config STM32_NOEXT_VECTORS
+	bool "Disable the ARMv7-M EXT vectors"
+	default n
+	---help---
+		Sometimes you may not need any Vector support beyond SysTick
+		and wish to save memory. This applies only to ARMv7-M architectures.
 
 menu "Alternate Pin Mapping"
 
@@ -3402,9 +3457,24 @@ config STM32_SAVE_CRASHDUMP
 
 endif # STM32_BKPSRAM
 
+config STM32_HAVE_RTC_COUNTER
+	bool
+	default n
+
 config STM32_HAVE_RTC_SUBSECONDS
 	bool
 	default n
+
+config RTC_MAGIC_REG
+	int "The BKP register used to store/check the Magic value to determine if RTC is set already"
+	default 0
+	range  0 19
+	depends on RTC && !STM32_HAVE_RTC_COUNTER
+
+config RTC_MAGIC
+	hex "Value used as Magic to determine if RTC is set already"
+	default 0xfacefeee
+	depends on RTC && !STM32_HAVE_RTC_COUNTER
 
 choice
 	prompt "RTC clock source"
@@ -3418,13 +3488,11 @@ config RTC_LSECLOCK
 
 config RTC_LSICLOCK
 	bool "LSI clock"
-	depends on !STM32_STM32L15XX
 	---help---
 		Drive the RTC with the LSI clock
 
 config RTC_HSECLOCK
 	bool "HSE clock"
-	depends on !STM32_STM32L15XX
 	---help---
 		Drive the RTC with the HSE clock, divided down to 1MHz.
 
@@ -3751,7 +3819,7 @@ config STM32_USB_ITRMP
 	---help---
 		The legacy USB in the F1 series shared interrupt lines with USB
 		device and CAN1.  In the F3 series, a hardware options was added to
-		either retain the legacy F1 behavior or to map the USB interupts to
+		either retain the legacy F1 behavior or to map the USB interrupts to
 		there own dedicated vectors.  The option is available only for the
 		F3 family and selects the use of the dedicated USB interrupts.
 
@@ -3923,7 +3991,13 @@ config FB_CMAP
 	bool "Enable color map support"
 	default y
 	---help---
-		Enabling color map suport is neccessary for ltdc L8 format.
+		Enabling color map support is neccessary for ltdc L8 format.
+
+config FB_TRANSPARENCY
+	bool "Enable transparency color map support"
+	default y
+	---help---
+		Enabling transparency color map support is neccessary for ltdc L8 format.
 
 endif
 endmenu
@@ -3943,14 +4017,17 @@ config STM32_DMA2D_NLAYERS
 menu "Supported pixel format"
 
 config STM32_DMA2D_L8
+	depends on FB_CMAP
 	bool "8 bpp L8 (8-bit CLUT)"
 	default y
 
 config STM32_DMA2D_AL44
+	depends on FB_CMAP
 	bool "8 bpp AL44 (4-bit alpha + 4-bit CLUT)"
 	default n
 
 config STM32_DMA2D_AL88
+	depends on FB_CMAP
 	bool "16 bpp AL88 (8-bit alpha + 8-bit CLUT)"
 	default n
 

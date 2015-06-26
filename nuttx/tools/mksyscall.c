@@ -47,7 +47,7 @@
 #include "csvparser.h"
 
 /****************************************************************************
- * Definitions
+ * Pre-processor Definitions
  ****************************************************************************/
 
 /****************************************************************************
@@ -514,7 +514,7 @@ static void generate_stub(int nparms)
             {
               /* Always pass six arguments */
 
-              for (j = i+1; j <=6; j++)
+              for (j = i+1; j <= 6; j++)
                 {
                   fprintf(stream, ", parm%d", j);
                 }

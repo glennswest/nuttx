@@ -1,5 +1,5 @@
 /************************************************************************************
- * arch/arm/src/sam34/chip/samv71_pinmap.h
+ * arch/arm/src/samv7/chip/samv71_pinmap.h
  *
  *   Copyright (C) 2015 Gregory Nutt. All rights reserved.
  *   Author: Gregory Nutt <gnutt@nuttx.org>
@@ -33,8 +33,8 @@
  *
  ************************************************************************************/
 
-#ifndef __ARCH_ARM_SRC_SAMV7_CHIP_SAM4E_PINMAP_H
-#define __ARCH_ARM_SRC_SAMV7_CHIP_SAM4E_PINMAP_H
+#ifndef __ARCH_ARM_SRC_SAMV7_CHIP_SAMV71_PINMAP_H
+#define __ARCH_ARM_SRC_SAMV7_CHIP_SAMV71_PINMAP_H
 
 /************************************************************************************
  * Included Files
@@ -69,8 +69,6 @@
 
 #define GPIO_AFE1_AD0        (GPIO_ALTERNATE | GPIO_PORT_PIOB | GPIO_PIN1)
 #define GPIO_AFE1_AD1        (GPIO_ALTERNATE | GPIO_PORT_PIOC | GPIO_PIN13)
-#define GPIO_AFE1_AD10       (GPIO_ALTERNATE | GPIO_PORT_PIOE | GPIO_PIN3)
-#define GPIO_AFE1_AD11       (GPIO_ALTERNATE | GPIO_PORT_PIOE | GPIO_PIN0)
 #define GPIO_AFE1_AD2        (GPIO_ALTERNATE | GPIO_PORT_PIOC | GPIO_PIN15)
 #define GPIO_AFE1_AD3        (GPIO_ALTERNATE | GPIO_PORT_PIOC | GPIO_PIN12)
 #define GPIO_AFE1_AD4        (GPIO_ALTERNATE | GPIO_PORT_PIOC | GPIO_PIN29)
@@ -79,6 +77,8 @@
 #define GPIO_AFE1_AD7        (GPIO_ALTERNATE | GPIO_PORT_PIOC | GPIO_PIN26)
 #define GPIO_AFE1_AD8        (GPIO_ALTERNATE | GPIO_PORT_PIOC | GPIO_PIN27)
 #define GPIO_AFE1_AD9        (GPIO_ALTERNATE | GPIO_PORT_PIOC | GPIO_PIN0)
+#define GPIO_AFE1_AD10       (GPIO_ALTERNATE | GPIO_PORT_PIOE | GPIO_PIN3)
+#define GPIO_AFE1_AD11       (GPIO_ALTERNATE | GPIO_PORT_PIOE | GPIO_PIN0)
 
 #define GPIO_DAC0            (GPIO_ALTERNATE | GPIO_PORT_PIOB | GPIO_PIN13)
 #define GPIO_DAC1            (GPIO_ALTERNATE | GPIO_PORT_PIOD | GPIO_PIN0)
@@ -571,4 +571,4 @@ extern "C"
 #endif
 
 #endif /* __ASSEMBLY__ */
-#endif /* __ARCH_ARM_SRC_SAMV7_CHIP_SAM4E_PINMAP_H */
+#endif /* __ARCH_ARM_SRC_SAMV7_CHIP_SAMV71_PINMAP_H */

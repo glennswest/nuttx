@@ -94,6 +94,13 @@ config ARCH_CHIP_TIVA
 	---help---
 		TI Tiva TM4C architectures (ARM Cortex-M4)
 
+config ARCH_CHIP_LPC11XX
+	bool "NXP LPC11xx"
+	select ARCH_CORTEXM0
+	select ARCH_HAVE_CMNVECTOR
+	---help---
+		NXP LPC11xx architectures (ARM Cortex-M0)
+
 config ARCH_CHIP_LPC17XX
 	bool "NXP LPC17xx"
 	select ARCH_CORTEXM3
@@ -159,11 +166,19 @@ config ARCH_CHIP_SAMD
 	---help---
 		Atmel SAMD (ARM Cortex-M0+)
 
+config ARCH_CHIP_SAML
+	bool "Atmel SAML"
+	select ARCH_CORTEXM0
+	select ARCH_HAVE_CMNVECTOR
+	---help---
+		Atmel SAML (ARM Cortex-M0+)
+
 config ARCH_CHIP_SAM34
 	bool "Atmel SAM3/SAM4"
 	select ARCH_HAVE_CMNVECTOR
 	select ARCH_HAVE_MPU
 	select ARCH_HAVE_RAMFUNCS
+	select ARMV7M_HAVE_STACKCHECK
 	---help---
 		Atmel SAM3 (ARM Cortex-M3) and SAM4 (ARM Cortex-M4) architectures
 
@@ -174,6 +189,7 @@ config ARCH_CHIP_SAMV7
 	select ARCH_CORTEXM7
 	select ARCH_HAVE_MPU
 	select ARCH_HAVE_RAMFUNCS
+	select ARMV7M_HAVE_STACKCHECK
 	---help---
 		Atmel SAMV7 (ARM Cortex-M7) architectures
 
@@ -183,6 +199,7 @@ config ARCH_CHIP_STM32
 	select ARCH_HAVE_MPU
 	select ARCH_HAVE_I2CRESET
 	select ARCH_HAVE_HEAPCHECK
+	select ARMV7M_HAVE_STACKCHECK
 	---help---
 		STMicro STM32 architectures (ARM Cortex-M3/4).
 
@@ -271,6 +288,7 @@ config ARCH_CHIP
 	default "kinetis"	if ARCH_CHIP_KINETIS
 	default "kl"		if ARCH_CHIP_KL
 	default "tiva"		if ARCH_CHIP_LM || ARCH_CHIP_TIVA
+	default "lpc11xx"	if ARCH_CHIP_LPC11XX
 	default "lpc17xx"	if ARCH_CHIP_LPC17XX
 	default "lpc214x"	if ARCH_CHIP_LPC214X
 	default "lpc2378"	if ARCH_CHIP_LPC2378
@@ -278,7 +296,7 @@ config ARCH_CHIP
 	default "lpc43xx"	if ARCH_CHIP_LPC43XX
 	default "nuc1xx"	if ARCH_CHIP_NUC1XX
 	default "sama5"		if ARCH_CHIP_SAMA5
-	default "samd"		if ARCH_CHIP_SAMD
+	default "samdl"		if ARCH_CHIP_SAMD || ARCH_CHIP_SAML
 	default "sam34"		if ARCH_CHIP_SAM34
 	default "samv7"		if ARCH_CHIP_SAMV7
 	default "stm32"		if ARCH_CHIP_STM32
@@ -376,7 +394,8 @@ config ARMV7M_MPU
 	select ARCH_USE_MPU
 	---help---
 		Build in support for the ARM Cortex-M3/4 Memory Protection Unit (MPU).
-		Check your chip specifications first; not all Cortex-M3/4 chips support the MPU.
+		Check your chip specifications first; not all Cortex-M3/4 chips
+		support the MPU.
 
 config ARMV7M_MPU_NREGIONS
 	int "Number of MPU regions"
@@ -450,6 +469,9 @@ endif
 if ARCH_CHIP_LM || ARCH_CHIP_TIVA
 source arch/arm/src/tiva/Kconfig
 endif
+if ARCH_CHIP_LPC11XX
+source arch/arm/src/lpc11xx/Kconfig
+endif
 if ARCH_CHIP_LPC17XX
 source arch/arm/src/lpc17xx/Kconfig
 endif
@@ -471,8 +493,8 @@ endif
 if ARCH_CHIP_SAMA5
 source arch/arm/src/sama5/Kconfig
 endif
-if ARCH_CHIP_SAMD
-source arch/arm/src/samd/Kconfig
+if ARCH_CHIP_SAMD || ARCH_CHIP_SAML
+source arch/arm/src/samdl/Kconfig
 endif
 if ARCH_CHIP_SAM34
 source arch/arm/src/sam34/Kconfig

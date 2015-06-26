@@ -1075,7 +1075,7 @@ BASIC
 
   Enable the BASIC interpreter.  Other default options should be okay:
     CONFIG_INTERPRETERS_BAS=y    : Enables the interpreter
-    CONFIG_INTERPREPTER_BAS_VT100=y
+    CONFIG_INTERPRETER_BAS_VT100=y
 
   The BASIC test suite can be included:
      CONFIG_FS_ROMFS=y           : ROMFS support is needed
@@ -1214,7 +1214,7 @@ Where <subdir> is one of the following:
 
        arm-none-eabi-ar.exe rcs libsupc++.a vterminate.o
 
-  4. Exceptions are enabled and workking (CONFIG_UCLIBCXX_EXCEPTIONS=y)
+  4. Exceptions are enabled and workking (CONFIG_UCLIBCXX_EXCEPTION=y)
 
   elf:
   ---
@@ -1250,6 +1250,19 @@ Where <subdir> is one of the following:
     5. This configuration requires that you have the genromfs tool installed
        on your system and that you have the full path to the installed genromfs
        executable in PATH variable (see apps/examples/README.txt)
+
+    6. This configuration can be extended to use the hello++4 example and to build uClibc with the following additions to to the configuration file (from Leo aloe3132):
+
+       CONFIG_C99_BOOL8=y
+       CONFIG_HAVE_CXXINITIALIZE=y
+
+       CONFIG_UCLIBCXX=y
+       CONFIG_UCLIBCXX_EXCEPTION=y
+       CONFIG_UCLIBCXX_HAVE_LIBSUPCXX=y
+       CONFIG_UCLIBCXX_IOSTREAM_BUFSIZE=32
+
+       CONFIG_EXAMPLES_ELF_CXXINITIALIZE=y
+       CONFIG_EXAMPLES_ELF_UCLIBCXX=y
 
   ipv6:
   ----
@@ -1490,7 +1503,17 @@ Where <subdir> is one of the following:
        CONFIG_WINDOWS_CYGWIN=y                 : Using Cygwin
        CONFIG_ARMV7M_TOOLCHAIN_CODESOURCERYW=y : CodeSourcery for Windows
 
-    3. This example supports the PWM test (apps/examples/pwm) but this must
+    3. To use this configuration with the STM32F4DIS-BB baseboard you
+       should:
+
+       - Select the STM32F4DIS-BB baseboard in the board configuration
+         menu
+       - Disable UART2 and select USART6 in the STM32 peripheral selection
+         menu
+       - Select USART6 as the serial console at 115200 8N1 in the
+         Drivers menus
+
+    4. This example supports the PWM test (apps/examples/pwm) but this must
        be manually enabled by selecting:
 
        CONFIG_PWM=y              : Enable the generic PWM infrastructure
@@ -1603,15 +1626,31 @@ Where <subdir> is one of the following:
        a USB host on the STM32F4Discovery, including support for a mass storage
        class driver:
 
-       CONFIG_USBDEV=n          : Make sure tht USB device support is disabled
-       CONFIG_USBHOST=y         : Enable USB host support
-       CONFIG_STM32_OTGFS=y     : Enable the STM32 USB OTG FS block
-       CONFIG_STM32_SYSCFG=y    : Needed for all USB OTF FS support
-       CONFIG_SCHED_WORKQUEUE=y : Worker thread support is required for the mass
-                                  storage class driver.
-       CONFIG_NSH_ARCHINIT=y    : Architecture specific USB initialization
-                                  is needed for NSH
-       CONFIG_FS_FAT=y          : Needed by the USB host mass storage class.
+       Device Drivers ->
+         CONFIG_USBDEV=n          : Make sure tht USB device support is disabled
+         CONFIG_USBHOST=y         : Enable USB host support
+         CONFIG_USBHOST_ISOC_DISABLE=y
+
+       Device Drivers -> USB Host Driver Support
+         CONFIG_USBHOST_MSC=y     : Enable the mass storage class
+
+       System Type -> STM32 Peripheral Support
+         CONFIG_STM32_OTGFS=y     : Enable the STM32 USB OTG FS block
+         CONFIG_STM32_SYSCFG=y    : Needed for all USB OTF FS support
+
+       RTOS Features -> Work Queue Support
+         CONFIG_SCHED_WORKQUEUE=y : High priority worker thread support is required
+         CONFIG_SCHED_HPWORK=y    :   for the mass storage class driver.
+
+       File Systems ->
+         CONFIG_FS_FAT=y          : Needed by the USB host mass storage class.
+
+       Board Selection ->
+         CONFIG_LIB_BOARDCTL=y    : Needed for CONFIG_NSH_ARCHINIT
+
+       Application Configuration -> NSH Library
+         CONFIG_NSH_ARCHINIT=y    : Architecture specific USB initialization
+                                  : is needed for NSH
 
        With those changes, you can use NSH with a FLASH pen driver as shown
        belong.  Here NSH is started with nothing in the USB host slot:
@@ -1657,6 +1696,39 @@ Where <subdir> is one of the following:
        before removing it:
 
        nsh> umount /mnt/stuff
+
+   11. I used this configuration to test the USB hub class.  I did this
+       testing with the following changes to the configuration (in addition
+       to those listed above for base USB host/mass storage class support):
+
+       Drivers -> USB Host Driver Support
+         CONFIG_USBHOST_HUB=y     : Enable the hub class
+         CONFIG_USBHOST_ASYNCH=y  : Asynchonous I/O supported needed for hubs
+
+       System Type -> USB host configuration
+         To be determined
+
+       Board Selection ->
+         CONFIG_STM32F4DISCO_USBHOST_STACKSIZE=2048 (bigger than it needs to be)
+
+       RTOS Features -> Work Queue Support
+         CONFIG_SCHED_LPWORK=y     : Low priority queue support is needed
+         CONFIG_SCHED_LPNTHREADS=1
+         CONFIG_SCHED_LPWORKSTACKSIZE=1024
+
+       NOTES:
+
+       1. It is necessary to perform work on the low-priority work queue
+          (vs. the high priority work queue) because deferred hub-related
+          work requires some delays and waiting that is not appropriate on
+          the high priority work queue.
+
+       2. Stack usage make increase when USB hub support is enabled because
+          the nesting depth of certain USB host class logic can increase.
+
+       STATUS:
+       2015-04-30
+          Appears to be fully functional.
 
   nxlines:
   ------

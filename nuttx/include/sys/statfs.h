@@ -102,6 +102,7 @@
 #define PROCFS_MAGIC          0x434f5250
 #define NXFFS_MAGIC           0x4747
 #define SMARTFS_MAGIC         0x54524D53
+#define UNIONFS_MAGIC         0x53464e55
 
 /****************************************************************************
  * Type Definitions
@@ -137,8 +138,8 @@ extern "C"
  * form of the struct statfs.
  */
 
-int statfs(const char *path, struct statfs *buf);
-int fstatfs(int fd, struct statfs *buf);
+int statfs(FAR const char *path, FAR struct statfs *buf);
+int fstatfs(int fd, FAR struct statfs *buf);
 
 #undef EXTERN
 #if defined(__cplusplus)

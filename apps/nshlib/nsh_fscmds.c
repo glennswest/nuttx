@@ -240,7 +240,7 @@ static inline int ls_specialdir(const char *dir)
 static int ls_handler(FAR struct nsh_vtbl_s *vtbl, FAR const char *dirpath,
                       FAR struct dirent *entryp, FAR void *pvarg)
 {
-  unsigned int lsflags = (unsigned int)pvarg;
+  unsigned int lsflags = (unsigned int)((uintptr_t)pvarg);
   int ret;
 
   /* Check if any options will require that we stat the file */
@@ -390,7 +390,7 @@ static int ls_recursive(FAR struct nsh_vtbl_s *vtbl, const char *dirpath,
     {
       /* Yes.. */
 
-      char *newpath;
+      FAR char *newpath;
       newpath = nsh_getdirpath(dirpath, entryp->d_name);
 
       /* List the directory contents */
@@ -408,6 +408,7 @@ static int ls_recursive(FAR struct nsh_vtbl_s *vtbl, const char *dirpath,
           free(newpath);
         }
     }
+
   return ret;
 }
 
@@ -994,19 +995,22 @@ int cmd_ls(FAR struct nsh_vtbl_s *vtbl, int argc, char **argv)
        * file
        */
 
-      ret = ls_handler(vtbl, fullpath, NULL, (void*)lsflags);
+      ret = ls_handler(vtbl, fullpath, NULL, (FAR void *)((uintptr_t)lsflags));
     }
   else
     {
       /* List the directory contents */
 
       nsh_output(vtbl, "%s:\n", fullpath);
-      ret = foreach_direntry(vtbl, "ls", fullpath, ls_handler, (void*)lsflags);
+
+      ret = foreach_direntry(vtbl, "ls", fullpath, ls_handler,
+                             (FAR void*)((uintptr_t)lsflags));
       if (ret == OK && (lsflags & LSFLAGS_RECURSIVE) != 0)
         {
           /* Then recurse to list each directory within the directory */
 
-          ret = foreach_direntry(vtbl, "ls", fullpath, ls_recursive, (void*)lsflags);
+          ret = foreach_direntry(vtbl, "ls", fullpath, ls_recursive,
+                                 (FAR void *)((uintptr_t)lsflags));
         }
     }
 

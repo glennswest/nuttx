@@ -1,7 +1,7 @@
 /****************************************************************************
  *  sched/mqueue/mq_timedreceive.c
  *
- *   Copyright (C) 2007-2009, 2011, 2013-2014 Gregory Nutt. All rights reserved.
+ *   Copyright (C) 2007-2009, 2011, 2013-2015 Gregory Nutt. All rights reserved.
  *   Author: Gregory Nutt <gnutt@nuttx.org>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -92,7 +92,7 @@
  *
  ****************************************************************************/
 
-static void mq_rcvtimeout(int argc, uint32_t pid)
+static void mq_rcvtimeout(int argc, wdparm_t pid)
 {
   FAR struct tcb_s *wtcb;
   irqstate_t saved_state;
@@ -258,11 +258,13 @@ ssize_t mq_timedreceive(mqd_t mqdes, FAR char *msg, size_t msglen,
 
       if (result != OK)
         {
-          set_errno(result);
           irqrestore(saved_state);
           sched_unlock();
+
           wd_delete(rtcb->waitdog);
           rtcb->waitdog = NULL;
+
+          set_errno(result);
           return ERROR;
         }
 

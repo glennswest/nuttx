@@ -343,8 +343,7 @@ o cp <source-path> <dest-path>
 
 o date [-s "MMM DD HH:MM:SS YYYY"]
 
-  Show or set the current date and time.  This command is only supported
-  if the platform supported RTC hardware (CONFIG_RTC=y).
+  Show or set the current date and time.
 
   Only one format is used both on display and when setting the date/time:
   MMM DD HH:MM:SS YYYY.  For example,
@@ -1258,9 +1257,9 @@ NSH-Specific Configuration Settings
 
   * CONFIG_NSH_ARCHINIT
       Set if your board provides architecture specific initialization
-      via the board-specific function nsh_archinitialize().  This
-      function will be called early in NSH initialization to allow
-      board logic to do such things as configure MMC/SD slots.
+      via the board-interface function boardctl().  This function will
+      be called early in NSH initialization to allow board logic to
+      do such things as configure MMC/SD slots.
 
   If Telnet is selected for the NSH console, then we must configure
   the resources used by the Telnet daemon and by the Telnet clients.

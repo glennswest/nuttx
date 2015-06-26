@@ -185,6 +185,10 @@ uintptr_t STUB_aio_write(int nbr, uintptr_t parm1);
 uintptr_t STUB_aio_fsync(int nbr, uintptr_t parm1, uintptr_t parm2);
 uintptr_t STUB_aio_cancel(int nbr, uintptr_t parm1, uintptr_t parm2);
 
+/* Board support */
+
+uintptr_t STUB_boardctl(int nbr, uintptr_t parm1, uintptr_t parm2);
+
 /* The following are defined if file descriptors are enabled */
 
 uintptr_t STUB_closedir(int nbr, uintptr_t parm1);
@@ -223,7 +227,7 @@ uintptr_t STUB_mount(int nbr, uintptr_t parm1, uintptr_t parm2,
             uintptr_t parm3, uintptr_t parm4, uintptr_t parm5);
 uintptr_t STUB_rename(int nbr, uintptr_t parm1, uintptr_t parm2);
 uintptr_t STUB_rmdir(int nbr, uintptr_t parm1);
-uintptr_t STUB_umount2(int nbr, uintptr_t parm1, uintptr parm2);
+uintptr_t STUB_umount2(int nbr, uintptr_t parm1, uintptr_t parm2);
 uintptr_t STUB_unlink(int nbr, uintptr_t parm1);
 
 /* Shared memory interfaces */
@@ -285,6 +289,7 @@ uintptr_t STUB_pthread_sigmask(int nbr, uintptr_t parm1, uintptr_t parm2,
 /* The following are defined only if message queues are enabled */
 
 uintptr_t STUB_mq_close(int nbr, uintptr_t parm1);
+uintptr_t STUB_mq_getattr(int nbr, uintptr_t parm1, uintptr_t parm2);
 uintptr_t STUB_mq_notify(int nbr, uintptr_t parm1, uintptr_t parm2);
 uintptr_t STUB_mq_open(int nbr, uintptr_t parm1, uintptr_t parm2,
             uintptr_t parm3, uintptr_t parm4, uintptr_t parm5,
@@ -293,6 +298,8 @@ uintptr_t STUB_mq_receive(int nbr, uintptr_t parm1, uintptr_t parm2,
             uintptr_t parm3, uintptr_t parm4);
 uintptr_t STUB_mq_send(int nbr, uintptr_t parm1, uintptr_t parm2,
             uintptr_t parm3, uintptr_t parm4);
+uintptr_t STUB_mq_setattr(int nbr, uintptr_t parm1, uintptr_t parm2,
+            uintptr_t parm3);
 uintptr_t STUB_mq_timedreceive(int nbr, uintptr_t parm1, uintptr_t parm2,
             uintptr_t parm3, uintptr_t parm4, uintptr_t parm5);
 uintptr_t STUB_mq_timedsend(int nbr, uintptr_t parm1, uintptr_t parm2,

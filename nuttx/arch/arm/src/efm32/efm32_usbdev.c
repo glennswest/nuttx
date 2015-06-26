@@ -67,7 +67,7 @@
 #if defined(CONFIG_USBDEV) && (defined(CONFIG_EFM32_OTGFS))
 
 /*******************************************************************************
- * Preprocessor Definitions
+ * Pre-processor Definitions
  *******************************************************************************/
 /* Configuration ***************************************************************/
 
@@ -2672,7 +2672,7 @@ static inline void efm32_epout_interrupt(FAR struct efm32_usbdev_s *priv)
               efm32_epout(priv, epno);
             }
 
-          /* Endpoint disabled interrupt (ignored because this interrrupt is
+          /* Endpoint disabled interrupt (ignored because this interrupt is
            * used in polled mode by the endpoint disable logic).
            */
 #if 1

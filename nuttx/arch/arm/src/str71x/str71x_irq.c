@@ -51,7 +51,7 @@
 #include "str71x_internal.h"
 
 /****************************************************************************
- * Pre-procesor Definitions
+ * Pre-processor Definitions
  ****************************************************************************/
 
 /****************************************************************************
@@ -198,7 +198,7 @@ void up_ack_irq(int irq)
  *
  * Description:
  *   Set interrupt priority.  Note, there is no way to prioritize
- *   individual XTI interrrupts.
+ *   individual XTI interrupts.
  *
  ****************************************************************************/
 

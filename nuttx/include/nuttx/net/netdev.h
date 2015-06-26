@@ -70,6 +70,8 @@
  * Public Types
  ****************************************************************************/
 
+struct devif_callback_s; /* Forward reference */
+
 /* This structure collects information that is specific to a specific network
  * interface driver.  If the hardware platform supports only a single instance
  * of this structure.
@@ -189,6 +191,29 @@ struct net_driver_s
 
   sq_queue_t grplist;
 #endif
+
+  /* Application callbacks:
+   *
+   * Network device event handlers are retained in a 'list' and are called
+   * for events specified in the flags set within struct devif_callback_s.
+   *
+   * There are two lists associated with each device:
+   *
+   *   1) d_pktcb - For connection/port oriented events for certain
+   *      socket-less packet transfers.  There events include:
+   *
+   *        ICMP data receipt: ICMP_NEWDATA, ICMPv6_NEWDATA
+   *        ICMP ECHO replies: ICMP_ECHOREPLY, ICMPv6_ECHOREPLY
+   *        Driver Tx poll events: ARP_POLL, ICMP_POLL. ICMPv6_POLL
+   *
+   *   2) d_devcb - For non-data, device related events that apply to all
+   *      transfers or connections involving this device:
+   *
+   *        NETDEV_DOWN - The network is down
+   */
+
+  FAR struct devif_callback_s *d_conncb;
+  FAR struct devif_callback_s *d_devcb;
 
   /* Driver callbacks */
 
@@ -481,4 +506,47 @@ uint16_t ipv4_chksum(FAR struct net_driver_s *dev);
 #ifdef CONFIG_NET_IPv6
 uint16_t ipv6_chksum(FAR struct net_driver_s *dev);
 #endif
+
+/****************************************************************************
+ * Function: netdev_ipv4_hdrlen
+ *
+ * Description:
+ *    Provide header length for interface based on device
+ *
+ * Input Parameters:
+ *   dev Device structure pointer
+ *
+ ****************************************************************************/
+
+#ifdef CONFIG_NET_IPv4
+#if defined(CONFIG_NET_MULTILINK)
+#  define netdev_ipv4_hdrlen(dev) (dev->d_llhdrlen)
+#elif defined(CONFIG_NET_ETHERNET)
+#  define netdev_ipv4_hdrlen(dev) ETH_HDRLEN
+#else /* if defined(CONFIG_NET_SLIP) */
+#  define netdev_ipv4_hdrlen(dev) 0
+#endif
+#endif /* CONFIG_NET_IPv4 */
+
+/****************************************************************************
+ * Function: netdev_ipv6_hdrlen
+ *
+ * Description:
+ *    Provide header length for interface based on device
+ *
+ * Input Parameters:
+ *   dev Device structure pointer
+ *
+ ****************************************************************************/
+
+#ifdef CONFIG_NET_IPv6
+#if defined(CONFIG_NET_MULTILINK)
+#  define netdev_ipv6_hdrlen(dev) dev->d_llhdrlen
+#elif defined(CONFIG_NET_ETHERNET)
+#  define netdev_ipv6_hdrlen(dev) ETH_HDRLEN
+#else /* if defined(CONFIG_NET_SLIP) */
+#  define netdev_ipv6_hdrlen(dev) 0
+#endif
+#endif /* CONFIG_NET_IPv6 */
+
 #endif /* __INCLUDE_NUTTX_NET_NETDEV_H */

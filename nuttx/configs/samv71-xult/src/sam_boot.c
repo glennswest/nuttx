@@ -1,4 +1,4 @@
-/************************************************************************************
+/****************************************************************************
  * configs/samv71-xult/src/sam_boot.c
  *
  *   Copyright (C) 2015 Gregory Nutt. All rights reserved.
@@ -31,11 +31,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- ************************************************************************************/
+ ****************************************************************************/
 
-/************************************************************************************
+/****************************************************************************
  * Included Files
- ************************************************************************************/
+ ****************************************************************************/
 
 #include <nuttx/config.h>
 
@@ -45,61 +45,60 @@
 #include <arch/board/board.h>
 
 #include "up_arch.h"
+#include "sam_start.h"
 #include "samv71-xult.h"
 
-/************************************************************************************
+/****************************************************************************
  * Pre-processor Definitions
- ************************************************************************************/
+ ****************************************************************************/
 
-/************************************************************************************
+/****************************************************************************
  * Private Functions
- ************************************************************************************/
+ ****************************************************************************/
 
-/************************************************************************************
+/****************************************************************************
  * Public Functions
- ************************************************************************************/
+ ****************************************************************************/
 
-/************************************************************************************
+/****************************************************************************
  * Name: sam_boardinitialize
  *
  * Description:
- *   All SAM3U architectures must provide the following entry point.  This entry point
- *   is called early in the initialization -- after all memory has been configured
- *   and mapped but before any devices have been initialized.
+ *   All SAMV7 architectures must provide the following entry point.  This
+ *   entry point is called early in the initialization -- after clocking and
+ *   memory have been configured but before caches have been enabled and
+ *   before any devices have been initialized.
  *
- ************************************************************************************/
+ ****************************************************************************/
 
 void sam_boardinitialize(void)
 {
 #ifdef CONFIG_SAMV7_SDRAMC
-  /* Configure SDRAM if it has been enabled in the NuttX configuration.  Here we
-   * assume, of course, that we are not running out SDRAM.
+  /* Configure SDRAM if it has been enabled in the NuttX configuration.
+   * Here we assume, of course, that we are not running out SDRAM.
    */
 
   sam_sdram_config();
 #endif
 
-  /* Configure SPI chip selects if 1) SPI is not disabled, and 2) the weak function
-   * sam_spiinitialize() has been brought into the link.
-   */
-
 #ifdef CONFIG_SAMV7_SPI
-  if (sam_spiinitialize)
-    {
-      sam_spiinitialize();
-    }
+  /* Configure SPI chip selects if SPI has been enabled */
+
+  sam_spiinitialize();
 #endif
 
-  /* Configure board resources to support networking if the 1) networking is enabled,
-   * 2) the EMAC module is enabled, and 2) the weak function sam_netinitialize()
-   * has been brought into the build.
-   */
+#ifdef HAVE_USB
+  /* Setup USB-related GPIO pins for the SAMV71-XULT board. */
+
+  sam_usbinitialize();
+#endif
 
 #ifdef HAVE_NETWORK
-  if (sam_netinitialize)
-    {
-      sam_netinitialize();
-    }
+  /* Configure board resources to support networking if the 1) networking is
+   * enabled, and 2) the EMAC module is enabled
+   */
+
+  sam_netinitialize();
 #endif
 
   /* Configure on-board LEDs if LED support has been selected. */
@@ -116,7 +115,7 @@ void sam_boardinitialize(void)
  *   If CONFIG_BOARD_INITIALIZE is selected, then an additional
  *   initialization call will be performed in the boot-up sequence to a
  *   function called board_initialize().  board_initialize() will be
- *   called immediately after up_intiialize() is called and just before the
+ *   called immediately after up_intitialize() is called and just before the
  *   initial application is started.  This additional initialization phase
  *   may be used, for example, to initialize board-specific device drivers.
  *

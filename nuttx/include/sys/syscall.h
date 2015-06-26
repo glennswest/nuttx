@@ -249,12 +249,21 @@
 #  ifndef CONFIG_DISABLE_POLL
 #    define SYS_poll                   __SYS_poll
 #    define SYS_select                 (__SYS_poll+1)
-#    define __SYS_filedesc             (__SYS_poll+2)
+#    define __SYS_boardctl             (__SYS_poll+2)
 #  else
-#    define __SYS_filedesc             __SYS_poll
+#    define __SYS_boardctl             __SYS_poll
 #  endif
 #else
-#  define __SYS_filedesc               __SYS_descriptors
+#  define __SYS_boardctl               __SYS_descriptors
+#endif
+
+/* Board support */
+
+#ifdef CONFIG_LIB_BOARDCTL
+#    define SYS_boardctl                __SYS_boardctl
+#  define __SYS_filedesc                (__SYS_boardctl+1)
+#else
+#  define __SYS_filedesc               __SYS_boardctl
 #endif
 
 /* The following are defined if file descriptors are enabled */
@@ -353,7 +362,7 @@
 #  define SYS_pthread_setspecific      (__SYS_pthread+26)
 #  define SYS_pthread_yield            (__SYS_pthread+27)
 
-#  ifndef CONFIG_DISABLE_SIGNAL
+#  ifndef CONFIG_DISABLE_SIGNALS
 #    define SYS_pthread_cond_timedwait (__SYS_pthread+28)
 #    define SYS_pthread_kill           (__SYS_pthread+29)
 #    define SYS_pthread_sigmask        (__SYS_pthread+30)
@@ -370,14 +379,16 @@
 
 #ifndef CONFIG_DISABLE_MQUEUE
 #  define SYS_mq_close                 (__SYS_mqueue+0)
-#  define SYS_mq_notify                (__SYS_mqueue+1)
-#  define SYS_mq_open                  (__SYS_mqueue+2)
-#  define SYS_mq_receive               (__SYS_mqueue+3)
-#  define SYS_mq_send                  (__SYS_mqueue+4)
-#  define SYS_mq_timedreceive          (__SYS_mqueue+5)
-#  define SYS_mq_timedsend             (__SYS_mqueue+6)
-#  define SYS_mq_unlink                (__SYS_mqueue+7)
-#  define __SYS_environ                (__SYS_mqueue+8)
+#  define SYS_mq_getattr               (__SYS_mqueue+1)
+#  define SYS_mq_notify                (__SYS_mqueue+2)
+#  define SYS_mq_open                  (__SYS_mqueue+3)
+#  define SYS_mq_receive               (__SYS_mqueue+4)
+#  define SYS_mq_send                  (__SYS_mqueue+5)
+#  define SYS_mq_setattr               (__SYS_mqueue+6)
+#  define SYS_mq_timedreceive          (__SYS_mqueue+7)
+#  define SYS_mq_timedsend             (__SYS_mqueue+8)
+#  define SYS_mq_unlink                (__SYS_mqueue+9)
+#  define __SYS_environ                (__SYS_mqueue+10)
 #else
 #  define __SYS_environ                __SYS_mqueue
 #endif

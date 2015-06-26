@@ -49,7 +49,7 @@
 #include <arch/board/board.h>
 
 #include "lpc17_gpio.h"
-#include "lincoln60_internal.h"
+#include "lincoln60.h"
 
 #ifdef CONFIG_ARCH_BUTTONS
 
@@ -69,7 +69,7 @@ static const uint16_t g_buttoncfg[BOARD_NUM_BUTTONS] =
   LINCOLN60_BUT1
 };
 
-/* This array defines all of the interupt handlers current attached to
+/* This array defines all of the interrupt handlers current attached to
  * button events.
  */
 

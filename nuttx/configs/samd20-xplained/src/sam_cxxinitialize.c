@@ -43,13 +43,10 @@
 
 #include <nuttx/arch.h>
 
-#include <arch/samd/chip.h>
-#include "chip.h"
-
 #if defined(CONFIG_HAVE_CXX) && defined(CONFIG_HAVE_CXXINITIALIZE)
 
 /************************************************************************************
- * Definitions
+ * Pre-processor Definitions
  ************************************************************************************/
 /* Debug ****************************************************************************/
 /* Non-standard debug that may be enabled just for testing the static constructors */

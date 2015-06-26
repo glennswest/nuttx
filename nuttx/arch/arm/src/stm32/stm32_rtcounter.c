@@ -61,7 +61,7 @@
 #include <nuttx/config.h>
 #include <nuttx/arch.h>
 #include <nuttx/irq.h>
-#include <nuttx/rtc.h>
+#include <nuttx/timers/rtc.h>
 #include <arch/board/board.h>
 
 #include <stdlib.h>
@@ -115,6 +115,14 @@
 
 #ifndef CONFIG_STM32_PWR
 #  error "CONFIG_STM32_PWR is required for CONFIG_RTC"
+#endif
+
+#ifdef CONFIG_STM32_STM32F10XX
+#  if defined(CONFIG_RTC_HSECLOCK)
+#    error "RTC with HSE clock not yet implemented for STM32F10XXX"
+#  elif defined(CONFIG_RTC_LSICLOCK)
+#    error "RTC with LSI clock not yet implemented for STM32F10XXX"
+#  endif
 #endif
 
 /* RTC/BKP Definitions *************************************************************/
@@ -362,7 +370,7 @@ int up_rtcinitialize(void)
    * registers and backup SRAM).
    */
 
-  stm32_pwr_enablebkp(true);
+  (void)stm32_pwr_enablebkp(true);
 
   /* Set access to the peripheral, enable the backup domain (BKP) and the lower
    * power external 32,768Hz (Low-Speed External, LSE) oscillator.  Configure the
@@ -413,7 +421,7 @@ int up_rtcinitialize(void)
    * registers and backup SRAM).
    */
 
-  stm32_pwr_enablebkp(false);
+  (void)stm32_pwr_enablebkp(false);
 
   return OK;
 }
@@ -581,24 +589,36 @@ int up_rtc_settime(FAR const struct timespec *tp)
 {
   struct rtc_regvals_s regvals;
   irqstate_t flags;
+  uint16_t cntl;
 
   /* Break out the time values */
 
   stm32_rtc_breakout(tp, &regvals);
 
+  /* Enable write access to the backup domain */
+
+  flags = irqsave();
+  (void)stm32_pwr_enablebkp(true);
+
   /* Then write the broken out values to the RTC counter and BKP overflow register
    * (hi-res mode only)
    */
 
-  flags = irqsave();
-  stm32_rtc_beginwr();
-  putreg16(regvals.cnth, STM32_RTC_CNTH);
-  putreg16(regvals.cntl, STM32_RTC_CNTL);
-  stm32_rtc_endwr();
+  do
+    {
+      stm32_rtc_beginwr();
+      putreg16(regvals.cnth, STM32_RTC_CNTH);
+      putreg16(regvals.cntl, STM32_RTC_CNTL);
+      cntl = getreg16(STM32_RTC_CNTL);
+      stm32_rtc_endwr();
+    }
+  while (cntl != regvals.cntl);
 
 #ifdef CONFIG_RTC_HIRES
   putreg16(regvals.ovf, RTC_TIMEMSB_REG);
 #endif
+
+  (void)stm32_pwr_enablebkp(false);
   irqrestore(flags);
   return OK;
 }

@@ -88,7 +88,7 @@
 
 #define NAMLEN(dirent) strlen((dirent)->d_name)
 
-extern char *crypt(const char *key, const char *setting);
+extern CODE char *crypt(const char *key, const char *setting);
 
 #ifndef MAX
 #  define MAX(a,b) ((a) > (b) ? (a) : (b))
@@ -1104,14 +1104,15 @@ static char *expand_filename(char *path, char **restP, bool tildemapped)
   static char *checked;
   static char *rest;
   static size_t maxchecked = 0, maxrest = 0;
-  size_t checkedlen, restlen, prevcheckedlen, prevrestlen;
+  size_t checkedlen;
+  size_t restlen;
 #if 0 // REVISIT
   struct stat sb;
 #endif
-  int nlinks, i;
   char *r;
   char *cp1;
   char *cp2;
+  int i;
 
   nvdbg("path: \"%s\"\n", path);
 #if 0 // REVISIT
@@ -1191,17 +1192,11 @@ static char *expand_filename(char *path, char **restP, bool tildemapped)
     }
 
   r = rest;
-  nlinks = 0;
 
   /* While there are still components to check... */
 
   while (restlen > 0)
     {
-      /* Save current checkedlen.  Save current restlen in case we get a non-existant component. */
-
-      prevcheckedlen = checkedlen;
-      prevrestlen    = restlen;
-
       /* Grab one component from r and transfer it to checked. */
 
       cp1 = strchr(r, '/');
@@ -1568,7 +1563,11 @@ static void ls_child(int argc, char **argv)
   struct stat lsb;
   char modestr[20];
   char *linkprefix;
+#if 0
   char link[MAXPATHLEN + 1];
+#else
+  char link[1];
+#endif
   char *fileclass;
   time_t now;
   char *timestr;
@@ -1645,6 +1644,7 @@ static void ls_child(int argc, char **argv)
       nameptrs[nnames][namlen] = '\0';
       ++nnames;
     }
+
   closedir(dirp);
 
   /* Sort the names. */
@@ -1823,7 +1823,6 @@ static int ls(httpd_conn *hc)
   struct stat lsb;
   char modestr[20];
   char *linkprefix;
-  char link[MAXPATHLEN + 1];
   char *fileclass;
   time_t now;
   char *timestr;
@@ -3231,11 +3230,13 @@ int httpd_start_request(httpd_conn *hc, struct timeval *nowP)
         }
 
       /* Nope, no index file, so it's an actual directory request. */
+
 #ifdef CONFIG_THTTPD_GENERATE_INDICES
       /* Directories must be readable for indexing. */
+
       if (!(hc->sb.st_mode & S_IROTH))
         {
-          ndbg("%s URL \"%s\" tried to index a directory with indexing disabled\n",
+          ndbg("%s URL \"%s\" tried to index a non-readable directory\n",
                  httpd_ntoa(&hc->client_addr), hc->encodedurl);
           httpd_send_err(hc, 403, err403title, "",
                          ERROR_FORM(err403form,
@@ -3263,8 +3264,9 @@ int httpd_start_request(httpd_conn *hc, struct timeval *nowP)
 
       return ls(hc);
 #else /* CONFIG_THTTPD_GENERATE_INDICES */
+      /* Indexing is disabled */
 
-      ndbg("%s URL \"%s\" tried to index a directory\n",
+      ndbg("%s URL \"%s\" tried to index a directory with indexing disabled\n",
              httpd_ntoa(&hc->client_addr), hc->encodedurl);
       httpd_send_err(hc, 403, err403title, "",
                      ERROR_FORM(err403form,

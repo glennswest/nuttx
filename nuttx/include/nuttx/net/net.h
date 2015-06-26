@@ -49,6 +49,10 @@
 #include <stdarg.h>
 #include <semaphore.h>
 
+#ifndef CONFIG_NET_NOINTS
+#  include <arch/irq.h>
+#endif
+
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
@@ -217,7 +221,7 @@ void net_initialize(void);
 
 /****************************************************************************
  * Critical section management.  The NuttX configuration setting
- * CONFIG_NET_NOINT indicates that uIP not called from the interrupt level.
+ * CONFIG_NET_NOINTS indicates that uIP not called from the interrupt level.
  * If CONFIG_NET_NOINTS is defined, then these will map to semaphore
  * controls.  Otherwise, it assumed that uIP will be called from interrupt
  * level handling and these will map to interrupt enable/disable controls.

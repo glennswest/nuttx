@@ -201,7 +201,7 @@ BASIC
 
   Enable the BASIC interpreter.  Other default options should be okay:
     CONFIG_INTERPRETERS_BAS=y    : Enables the interpreter
-    CONFIG_INTERPREPTER_BAS_VT100=y
+    CONFIG_INTERPRETER_BAS_VT100=y
 
   The BASIC test suite can be included:
      CONFIG_FS_ROMFS=y           : ROMFS support is needed
@@ -309,7 +309,7 @@ cxxtest
      how to install uClibc++
 
   2. At present (2012/11/02), exceptions are disabled in this example
-     CONFIG_UCLIBCXX_EXCEPTIONS=n).  It is probably not necessary to
+     CONFIG_UCLIBCXX_EXCEPTION=n).  It is probably not necessary to
      disable exceptions.
 
   3. Unfortunately, this example will not run now.
@@ -490,7 +490,7 @@ nx11
        CONFIG_SIM_TOUCHSCREEN=y
 
      Then you must also have some application logic that will call
-     arch_tcinitialize(0) to register the touchscreen driver.  See
+     board_tsc_setup(0) to register the touchscreen driver.  See
      also configuration "touchscreen"
 
      NOTES:
@@ -696,6 +696,50 @@ udgram
     nsh> mount -t binfs /bin
     nsh> server &
     nsh> client
+
+unionfs
+
+  This is a version of NSH dedicated to performing the simple test
+  of the Union File System at apps/exmaples/uniofs.  The command
+  'unionfs' will mount the Union File System at /mnt/unionfs.  You
+  can than compare what you see at /mnt/unionfs with the content
+  of the ROMFS file systems at apps/examples/unionfs/atestdir and
+  btestdir.
+
+  Here is some sample output from the test:
+
+    NuttShell (NSH)
+    nsh> unionfs
+    Mounting ROMFS file system 1 at target=/mnt/a with source=/dev/ram4
+    Mounting ROMFS file system 2 at target=/mnt/b with source=/dev/ram5
+    nsh> ls /mnt/unionfs/adir
+    /mnt/unionfs/adir:
+     ..
+     asubdir/
+     adirfile.txt
+     bsubdir/
+     bdirfile.txt
+
+  adir/ exists in both file system 1 and file system 2.   Above you are
+  looking at the merged content.  The unified directory listing is showing
+  files from both file systems in their respective adir/ subdirectory.
+  The file adirfile.txt exists in both file system 1 and file system 2 but
+  the version if file system 2 is occluded by the version in file system 1.
+  The only way that you can which are looking at is by cat'ing the file:
+
+    nsh> cat /mnt/unionfs/adir/adirfile.txt
+    This is a file in directory adir on file system 1
+
+
+  The file on file system 1 has correctly occluded the file with the same
+  name on file system 2.  bdirfile.txt, however, only exists on file
+  system 2, so it is not occluded:
+
+    nsh> cat /mnt/unionfs/adir/bdirfile.txt
+    This is another file in directory adir on file system 2
+
+  You can see the files in the two file systems before they were unified at
+  apps/examples/unionfs/atestdir and btestdir.
 
 ustream
 

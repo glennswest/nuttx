@@ -203,6 +203,10 @@ static int     cdcuart_attach(FAR struct uart_dev_s *dev);
 static void    cdcuart_detach(FAR struct uart_dev_s *dev);
 static int     cdcuart_ioctl(FAR struct file *filep,int cmd,unsigned long arg);
 static void    cdcuart_rxint(FAR struct uart_dev_s *dev, bool enable);
+#ifdef CONFIG_SERIAL_IFLOWCONTROL
+static bool    cdcuart_rxflowcontrol(FAR struct uart_dev_s *dev,
+                 unsigned int nbuffered, bool upper);
+#endif
 static void    cdcuart_txint(FAR struct uart_dev_s *dev, bool enable);
 static bool    cdcuart_txempty(FAR struct uart_dev_s *dev);
 
@@ -213,16 +217,16 @@ static bool    cdcuart_txempty(FAR struct uart_dev_s *dev);
 
 static const struct usbdevclass_driverops_s g_driverops =
 {
-  cdcacm_bind,          /* bind */
-  cdcacm_unbind,        /* unbind */
-  cdcacm_setup,         /* setup */
-  cdcacm_disconnect,    /* disconnect */
+  cdcacm_bind,           /* bind */
+  cdcacm_unbind,         /* unbind */
+  cdcacm_setup,          /* setup */
+  cdcacm_disconnect,     /* disconnect */
 #ifdef CONFIG_SERIAL_REMOVABLE
-  cdcacm_suspend,       /* suspend */
-  cdcacm_resume,        /* resume */
+  cdcacm_suspend,        /* suspend */
+  cdcacm_resume,         /* resume */
 #else
-  NULL,                 /* suspend */
-  NULL,                 /* resume */
+  NULL,                  /* suspend */
+  NULL,                  /* resume */
 #endif
 };
 
@@ -230,21 +234,21 @@ static const struct usbdevclass_driverops_s g_driverops =
 
 static const struct uart_ops_s g_uartops =
 {
-  cdcuart_setup,        /* setup */
-  cdcuart_shutdown,     /* shutdown */
-  cdcuart_attach,       /* attach */
-  cdcuart_detach,       /* detach */
-  cdcuart_ioctl,        /* ioctl */
-  NULL,                 /* receive */
-  cdcuart_rxint,        /* rxinit */
-  NULL,                 /* rxavailable */
+  cdcuart_setup,         /* setup */
+  cdcuart_shutdown,      /* shutdown */
+  cdcuart_attach,        /* attach */
+  cdcuart_detach,        /* detach */
+  cdcuart_ioctl,         /* ioctl */
+  NULL,                  /* receive */
+  cdcuart_rxint,         /* rxinit */
+  NULL,                  /* rxavailable */
 #ifdef CONFIG_SERIAL_IFLOWCONTROL
-  NULL,                 /* rxflowcontrol */
+  cdcuart_rxflowcontrol, /* rxflowcontrol */
 #endif
-  NULL,                 /* send */
-  cdcuart_txint,        /* txinit */
-  NULL,                 /* txready */
-  cdcuart_txempty       /* txempty */
+  NULL,                  /* send */
+  cdcuart_txint,         /* txinit */
+  NULL,                  /* txready */
+  cdcuart_txempty        /* txempty */
 };
 
 /****************************************************************************
@@ -456,8 +460,16 @@ static inline int cdcacm_recvpacket(FAR struct cdcacm_dev_s *priv,
     }
 
   /* Then copy data into the RX buffer until either: (1) all of the data has been
-   * copied, or (2) the RX buffer is full.  NOTE:  If the RX buffer becomes full,
-   * then we have overrun the serial driver and data will be lost.
+   * copied, or (2) the RX buffer is full.
+   *
+   * NOTE:  If the RX buffer becomes full, then we have overrun the serial driver
+   * and data will be lost.  This is the correct behavior for a proper emulation
+   * of a serial link.  It should not NAK, it should drop data like a physical
+   * serial port.
+   *
+   * If you don't like that behavior.  DO NOT change it here.  Instead, you should
+   * finish the implementation of RX flow control which is the only proper way
+   * to throttle a serial device.
    */
 
   while (nexthead != recv->tail && nbytes < reqlen)
@@ -689,6 +701,7 @@ static int cdcacm_setconfig(FAR struct cdcacm_dev_s *priv, uint8_t config)
       usbtrace(TRACE_CLSERROR(USBSER_TRACEERR_EPINTINCONFIGFAIL), 0);
       goto errout;
     }
+
   priv->epintin->priv = priv;
 
   /* Configure the IN bulk endpoint */
@@ -1463,7 +1476,7 @@ static int cdcacm_setup(FAR struct usbdevclass_driver_s *driver,
               {
                 /* Save the new line coding in the private data structure.  NOTE:
                  * that this is conditional now because not all device controller
-                 * drivers supported provisioni of EP0 OUT data with the setup
+                 * drivers supported provision of EP0 OUT data with the setup
                  * command.
                  */
 
@@ -1471,6 +1484,8 @@ static int cdcacm_setup(FAR struct usbdevclass_driver_s *driver,
                   {
                     memcpy(&priv->linecoding, dataout, SIZEOF_CDC_LINECODING);
                   }
+
+                /* Respond with a zero length packet */
 
                 ret = 0;
 
@@ -1500,7 +1515,7 @@ static int cdcacm_setup(FAR struct usbdevclass_driver_s *driver,
                 index == CDCACM_NOTIFID)
               {
                 /* Save the control line state in the private data structure. Only bits
-                 * 0 and 1 have meaning.
+                 * 0 and 1 have meaning.  Respond with a zero length packet.
                  */
 
                 priv->ctrlline = value & 3;
@@ -1530,7 +1545,7 @@ static int cdcacm_setup(FAR struct usbdevclass_driver_s *driver,
                 index == CDCACM_NOTIFID)
               {
                 /* If there is a registered callback to handle the SendBreak request,
-                 * then callout now.
+                 * then callout now.  Respond with a zero length packet.
                  */
 
                 ret = 0;
@@ -1584,6 +1599,8 @@ static int cdcacm_setup(FAR struct usbdevclass_driver_s *driver,
           cdcacm_ep0incomplete(dev->ep0, ctrlreq);
         }
     }
+
+  /* Returning a negative value will cause a STALL */
 
   return ret;
 }
@@ -2116,6 +2133,44 @@ static void cdcuart_rxint(FAR struct uart_dev_s *dev, bool enable)
     }
   irqrestore(flags);
 }
+
+/****************************************************************************
+ * Name: cdcuart_rxflowcontrol
+ *
+ * Description:
+ *   Called when Rx buffer is full (or exceeds configured watermark levels
+ *   if CONFIG_SERIAL_IFLOWCONTROL_WATERMARKS is defined).
+ *   Return true if UART activated RX flow control to block more incoming
+ *   data
+ *
+ * Input parameters:
+ *   dev       - UART device instance
+ *   nbuffered - the number of characters currently buffered
+ *               (if CONFIG_SERIAL_IFLOWCONTROL_WATERMARKS is
+ *               not defined the value will be 0 for an empty buffer or the
+ *               defined buffer size for a full buffer)
+ *   upper     - true indicates the upper watermark was crossed where
+ *               false indicates the lower watermark has been crossed
+ *
+ * Returned Value:
+ *   true if RX flow control activated.
+ *
+ ****************************************************************************/
+
+#ifdef CONFIG_SERIAL_IFLOWCONTROL
+static bool cdcuart_rxflowcontrol(FAR struct uart_dev_s *dev,
+                                  unsigned int nbuffered, bool upper)
+{
+#ifdef CONFIG_CDCACM_IFLOWCONTROL
+  /* Allocate a request */
+  /* Format the SerialState notification */
+  /* Submit the request on the Interrupt IN endpoint */
+#  warning Missing logic
+#endif
+
+  return false;
+}
+#endif
 
 /****************************************************************************
  * Name: cdcuart_txint

@@ -82,6 +82,25 @@
  ****************************************************************************/
 
 /****************************************************************************
+ * Function: arp_send_terminate
+ ****************************************************************************/
+
+static void arp_send_terminate(FAR struct arp_send_s *state, int result)
+{
+  /* Don't allow any further call backs. */
+
+   state->snd_sent         = true;
+   state->snd_result       = (int16_t)result;
+   state->snd_cb->flags    = 0;
+   state->snd_cb->priv     = NULL;
+   state->snd_cb->event    = NULL;
+
+   /* Wake up the waiting thread */
+
+   sem_post(&state->snd_sem);
+}
+
+/****************************************************************************
  * Function: arp_send_interrupt
  ****************************************************************************/
 
@@ -95,17 +114,14 @@ static uint16_t arp_send_interrupt(FAR struct net_driver_s *dev,
 
   if (state)
     {
-#ifdef CONFIG_NETDEV_MULTINIC
-      /* Is this the device that we need to route this request? */
+      /* Check if the network is still up */
 
-      if (strncmp((FAR const char *)dev->d_ifname, (FAR const char *)state->snd_ifname, IFNAMSIZ) != 0)
+      if ((flags & NETDEV_DOWN) != 0)
         {
-          /* No... pass on this one and wait for the device that we want */
-
+          nlldbg("ERROR: Interface is down\n");
+          arp_send_terminate(state, -ENETUNREACH);
           return flags;
         }
-
-#endif
 
       /* Check if the outgoing packet is available. It may have been claimed
        * by a send interrupt serving a different thread -OR- if the output
@@ -138,14 +154,7 @@ static uint16_t arp_send_interrupt(FAR struct net_driver_s *dev,
 
       /* Don't allow any further call backs. */
 
-      state->snd_sent         = true;
-      state->snd_cb->flags    = 0;
-      state->snd_cb->priv     = NULL;
-      state->snd_cb->event    = NULL;
-
-      /* Wake up the waiting thread */
-
-      sem_post(&state->snd_sem);
+      arp_send_terminate(state, OK);
     }
 
   return flags;
@@ -223,7 +232,7 @@ int arp_send(in_addr_t ipaddr)
   /* Get the device that can route this request */
 
 #ifdef CONFIG_NETDEV_MULTINIC
-  dev = netdev_findby_ipv4addr(g_ipv4_allzeroaddr, ipaddr);
+  dev = netdev_findby_ipv4addr(INADDR_ANY, ipaddr);
 #else
   dev = netdev_findby_ipv4addr(ipaddr);
 #endif
@@ -281,10 +290,10 @@ int arp_send(in_addr_t ipaddr)
    */
 
   save = net_lock();
-  state.snd_cb = arp_callback_alloc(&g_arp_conn);
+  state.snd_cb = arp_callback_alloc(dev);
   if (!state.snd_cb)
     {
-      ndbg("ERROR: Failed to allocate a cllback\n");
+      ndbg("ERROR: Failed to allocate a callback\n");
       ret = -ENOMEM;
       goto errout_with_lock;
     }
@@ -332,7 +341,8 @@ int arp_send(in_addr_t ipaddr)
       /* Arm/re-arm the callback */
 
       state.snd_sent      = false;
-      state.snd_cb->flags = ARP_POLL;
+      state.snd_result    = -EBUSY;
+      state.snd_cb->flags = (ARP_POLL | NETDEV_DOWN);
       state.snd_cb->priv  = (FAR void *)&state;
       state.snd_cb->event = arp_send_interrupt;
 
@@ -356,6 +366,17 @@ int arp_send(in_addr_t ipaddr)
         }
       while (!state.snd_sent);
 
+      /* Check the result of the send operation */
+
+      ret = state.snd_result;
+      if (ret < 0)
+        {
+          /* Break out on a send failure */
+
+          ndbg("ERROR: Send failed: %d\n", ret);
+          break;
+        }
+
       /* Now wait for response to the ARP response to be received.  The
        * optimal delay would be the work case round trip time.
        * NOTE: The network is locked.
@@ -370,18 +391,21 @@ int arp_send(in_addr_t ipaddr)
        * is received.  Otherwise, it will return -ETIMEDOUT.
        */
 
-      if (ret == OK)
+      if (ret >= OK)
         {
+          /* Break out if arp_wait() fails */
+
           break;
         }
 
       /* Increment the retry count */
 
       state.snd_retries++;
+      ndbg("ERROR: arp_wait failed: %d\n", ret);
     }
 
   sem_destroy(&state.snd_sem);
-  arp_callback_free(&g_arp_conn, state.snd_cb);
+  arp_callback_free(dev, state.snd_cb);
 errout_with_lock:
   net_unlock(save);
 errout:

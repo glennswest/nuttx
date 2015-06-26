@@ -1,7 +1,7 @@
 /****************************************************************************
  * arch/arm/src/sam34/sam_serial.c
  *
- *   Copyright (C) 2010, 2012-2014 Gregory Nutt. All rights reserved.
+ *   Copyright (C) 2010, 2012-2015 Gregory Nutt. All rights reserved.
  *   Author: Gregory Nutt <gnutt@nuttx.org>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -650,9 +650,11 @@ static inline void up_serialout(struct up_dev_s *priv, int offset, uint32_t valu
 
 static inline void up_restoreusartint(struct up_dev_s *priv, uint32_t imr)
 {
-  /* Restore the previous interrupt state */
+  /* Re-enable previously disabled interrupts state (assuming all interrupts
+   * disabled)
+   */
 
-  up_serialout(priv, SAM_UART_IMR_OFFSET, imr);
+  up_serialout(priv, SAM_UART_IER_OFFSET, imr);
 }
 
 /****************************************************************************
@@ -693,6 +695,7 @@ static int up_setup(struct uart_dev_s *dev)
   struct up_dev_s *priv = (struct up_dev_s*)dev->priv;
 #ifndef CONFIG_SUPPRESS_UART_CONFIG
   uint32_t regval;
+  uint32_t imr;
 
   /* Note: The logic here depends on the fact that that the USART module
    * was enabled and the pins were configured in sam_lowsetup().
@@ -700,6 +703,7 @@ static int up_setup(struct uart_dev_s *dev)
 
   /* The shutdown method will put the UART in a known, disabled state */
 
+  up_disableallints(priv, &imr);
   up_shutdown(dev);
 
   /* Set up the mode register.  Start with normal UART mode and the MCK
@@ -787,6 +791,15 @@ static int up_setup(struct uart_dev_s *dev)
       regval |= UART_MR_NBSTOP_1;
     }
 
+#ifdef CONFIG_SAM34_UART1_OPTICAL
+  if (priv == &g_uart1priv)
+    {
+      /* Enable optical mode. */
+
+      regval |= UART_MR_OPT_EN;
+    }
+#endif
+
   /* And save the new mode register value */
 
   up_serialout(priv, SAM_UART_MR_OFFSET, regval);
@@ -806,6 +819,8 @@ static int up_setup(struct uart_dev_s *dev)
   /* Enable receiver & transmitter */
 
   up_serialout(priv, SAM_UART_CR_OFFSET, (UART_CR_RXEN|UART_CR_TXEN));
+  up_restoreusartint(priv, imr);
+
 #endif
 
   return OK;
@@ -1094,6 +1109,7 @@ static int up_ioctl(struct file *filep, int cmd, unsigned long arg)
         struct termios  *termiosp = (struct termios*)arg;
         struct up_dev_s *priv     = (struct up_dev_s *)dev->priv;
         uint32_t baud;
+        uint32_t imr;
         uint8_t parity;
         uint8_t nbits;
         bool stop2;
@@ -1178,7 +1194,12 @@ static int up_ioctl(struct file *filep, int cmd, unsigned long arg)
              * implement TCSADRAIN / TCSAFLUSH
              */
 
+            up_disableallints(priv, &imr);
             ret = up_setup(dev);
+
+            /* Restore the interrupt state */
+
+            up_restoreusartint(priv, imr);
           }
       }
       break;

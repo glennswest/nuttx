@@ -96,8 +96,8 @@
 #ifndef CONFIG_LIBC_LOCALTIME
 /* Local time is the same as gmtime in this implementation */
 
-#define localtime(c)       gmtime(c)
-#define localtime_r(c,r)   gmtime_r(c,r)
+#  define localtime(c)       gmtime(c)
+#  define localtime_r(c,r)   gmtime_r(c,r)
 #endif
 
 /********************************************************************************
@@ -124,7 +124,7 @@ struct timespec
  * REVISIT: This structure could be packed better using uint8_t's and
  * uint16_t's.  The standard definition does, however, call out type int for
  * all of the members.  NOTE: Any changes to this structure must be also be
- * reflected in struct rtc_time defined in include/nuttx/rtc.h; these two
+ * reflected in struct rtc_time defined in include/nuttx/timers/rtc.h; these two
  * structures must be cast compatible.
  */
 
@@ -136,7 +136,7 @@ struct tm
   int tm_mday;    /* Day of the month (1-31) */
   int tm_mon;     /* Month (0-11) */
   int tm_year;    /* Years since 1900 */
-#ifdef CONFIG_LIBC_LOCALTIME
+#if defined(CONFIG_LIBC_LOCALTIME) || defined(CONFIG_TIME_EXTENDED)
   int tm_wday;    /* Day of the week (0-6) */
   int tm_yday;    /* Day of the year (0-365) */
   int tm_isdst;   /* Non-0 if daylight savings time is in effect */
@@ -168,14 +168,20 @@ extern "C"
 #define EXTERN extern
 #endif
 
+#ifdef CONFIG_LIBC_LOCALTIME
+
 /* daylight - Daylight savings time flag */
 /* EXTERN int daylight; not supported */
 
 /* timezone - Difference from UTC and local standard time */
 /* EXTERN long int timezone; not supported */
 
-/* tzname[] - Timezone strings */
-/* EXTERN FAR char *tzname[]; not supported */
+/* tzname[] - Timezone strings
+ * Setup by tzset()
+ */
+
+EXTERN FAR char *tzname[2];
+#endif
 
 /********************************************************************************
  * Public Function Prototypes
@@ -190,6 +196,10 @@ int clock_getres(clockid_t clockid, FAR struct timespec *res);
 time_t mktime(FAR struct tm *tp);
 FAR struct tm *gmtime(FAR const time_t *timer);
 FAR struct tm *gmtime_r(FAR const time_t *timer, FAR struct tm *result);
+#ifdef CONFIG_LIBC_LOCALTIME
+FAR struct tm *localtime(FAR const time_t *timer);
+FAR struct tm *localtime_r(FAR const time_t *timer, FAR struct tm *result);
+#endif
 size_t strftime(FAR char *s, size_t max, FAR const char *format,
                 FAR const struct tm *tm);
 
@@ -205,6 +215,10 @@ int timer_gettime(timer_t timerid, FAR struct itimerspec *value);
 int timer_getoverrun(timer_t timerid);
 
 int nanosleep(FAR const struct timespec *rqtp, FAR struct timespec *rmtp);
+
+#ifdef CONFIG_LIBC_LOCALTIME
+void tzset(void);
+#endif
 
 #undef EXTERN
 #if defined(__cplusplus)

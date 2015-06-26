@@ -96,8 +96,10 @@
 #  warning REVISIT: CONFIG_NET_MULILINK multilink support incomplete
 #endif
 
-/* If both SLIP and Ethernet interfaces are present, only the Ethernet
- * interface will be initialized.
+/* Select the single network device name supported this this network
+ * initialization logci.  If multiple interfaces are present with different
+ * link types, the the orider of definition in the following conditional
+ * logic will select the one interface that will be used.
  */
 
 #if defined(CONFIG_NET_ETHERNET)
@@ -107,7 +109,11 @@
 #  ifndef CONFIG_NSH_NOMAC
 #    error "CONFIG_NSH_NOMAC must be defined for SLIP"
 #  endif
-#elif !defined(CONFIG_NET_LOCAL)
+#elif defined(CONFIG_NET_TUN)
+#  define NET_DEVNAME "tun0"
+#elif defined(CONFIG_NET_LOCAL)
+#  define NET_DEVNAME "lo"
+#else
 #  error ERROR: No link layer protocol defined
 #endif
 
@@ -219,12 +225,6 @@ static void nsh_netinit_configure(void)
   /* Many embedded network interfaces must have a software assigned MAC */
 
 #if defined(CONFIG_NSH_NOMAC) && defined(CONFIG_NET_ETHERNET)
-#ifdef CONFIG_NSH_ARCHMAC
-  /* Let platform-specific logic assign the MAC address. */
-
-  (void)nsh_arch_macaddress(mac);
-
-#else
   /* Use the configured, fixed MAC address */
 
   mac[0] = (CONFIG_NSH_MACADDR >> (8 * 5)) & 0xff;
@@ -233,7 +233,6 @@ static void nsh_netinit_configure(void)
   mac[3] = (CONFIG_NSH_MACADDR >> (8 * 2)) & 0xff;
   mac[4] = (CONFIG_NSH_MACADDR >> (8 * 1)) & 0xff;
   mac[5] = (CONFIG_NSH_MACADDR >> (8 * 0)) & 0xff;
-#endif
 
   /* Set the MAC address */
 

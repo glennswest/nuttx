@@ -63,6 +63,15 @@
 #define STM32_OPTION_BASE    0x1ffff800     /* 0x1fffc000-0x1fffc007: Option bytes */
                                             /* 0x1fffc008-0x1fffffff: Reserved */
 
+/* System Memory Addresses **********************************************************/
+
+#define STM32_SYSMEM_UID     0x1ffff7ac     /* The 96-bit unique device identifier */
+#define STM32_SYSMEM_FSIZE   0x1ffff7cc     /* This bitfield indicates the size of
+                                             * the device Flash memory expressed in
+                                             * Kbytes.  Example: 0x040 corresponds
+                                             * to 64 Kbytes
+                                             */
+
 /* Peripheral Base Addresses ********************************************************/
 
 #define STM32_APB1_BASE      0x40000000     /* 0x40000000-0x40009fff: APB1 */
@@ -133,12 +142,12 @@
 #define STM32_GPIOA_BASE     0x48000000     /* 0x48000000-0x480003ff: GPIO Port A */
 #define STM32_GPIOB_BASE     0x48000400     /* 0x48000400-0x480007ff: GPIO Port B */
 #define STM32_GPIOC_BASE     0x48000800     /* 0x48000800-0x48000bff: GPIO Port C */
-#define STM32_GPIOD_BASE     0X40000C00     /* 0x48000c00-0x48000fff: GPIO Port D */
+#define STM32_GPIOD_BASE     0X48000C00     /* 0x48000c00-0x48000fff: GPIO Port D */
 #define STM32_GPIOE_BASE     0x48001000     /* 0x48001000-0x480013ff: GPIO Port E */
 #define STM32_GPIOF_BASE     0x48001400     /* 0x48001400-0x480017ff: GPIO Port F */
 
 /* Cortex-M4 Base Addresses *********************************************************/
-/* Other registers -- see armv7-m/nvic.h for standard Cortex-M3 registers in this
+/* Other registers -- see armv7-m/nvic.h for standard Cortex-M4 registers in this
  * address range
  */
 
@@ -146,4 +155,3 @@
 #define STM32_DEBUGMCU_BASE 0xe0042000
 
 #endif /* __ARCH_ARM_SRC_STM32_CHIP_STM32F37XXX_MEMORYMAP_H */
-

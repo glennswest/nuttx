@@ -41,17 +41,18 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <debug.h>
 #include <assert.h>
 #include <errno.h>
+#include <debug.h>
 
+#include <nuttx/board.h>
 #include <nuttx/usb/usbhost.h>
 #include <nuttx/input/touchscreen.h>
 
 #ifdef CONFIG_USBHOST_HIDMOUSE
 
 /****************************************************************************
- * Pre-Processor Definitions
+ * Pre-processor Definitions
  ****************************************************************************/
 /* Both CONFIG_DEBUG_INPUT and CONFIG_DEBUG_USB could apply to this file.
  * We assume here that CONFIG_DEBUG_INPUT might be enabled separately, but
@@ -90,7 +91,7 @@
  ****************************************************************************/
 
 /****************************************************************************
- * Name: arch_tcinitialize
+ * Name: board_tsc_setup
  *
  * Description:
  *   Each board that supports a touchscreen device must provide this
@@ -108,7 +109,7 @@
  *
  ****************************************************************************/
 
-int arch_tcinitialize(int minor)
+int board_tsc_setup(int minor)
 {
   static bool initialized = false;
   int ret;
@@ -124,6 +125,16 @@ int arch_tcinitialize(int minor)
 
   if (!initialized)
     {
+#ifdef CONFIG_USBHOST_HUB
+      /* Initialize USB hub support */
+
+      ret = usbhost_hub_initialize();
+      if (ret < 0)
+        {
+          idbg("ERROR: usbhost_hub_initialize failed: %d\n", ret);
+        }
+#endif
+
       /* Initialize and register the USB HID mouse device class */
 
       ret = usbhost_mouse_init();
@@ -142,7 +153,7 @@ int arch_tcinitialize(int minor)
 }
 
 /****************************************************************************
- * Name: arch_tcuninitialize
+ * Name: board_tsc_teardown
  *
  * Description:
  *   Each board that supports a touchscreen device must provide this function.
@@ -157,7 +168,7 @@ int arch_tcinitialize(int minor)
  *
  ****************************************************************************/
 
-void arch_tcuninitialize(void)
+void board_tsc_teardown(void)
 {
   /* No support for un-initializing the USB mouse driver.  It will continue
    * to run and process touch interrupts in the background.

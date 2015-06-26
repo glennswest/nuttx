@@ -128,10 +128,6 @@
 #  define CONFIG_NSH_MACADDR   0x00e0deadbeef
 #endif
 
-#ifndef CONFIG_NET
-#  undef CONFIG_NSH_ARCHMAC
-#endif
-
 #if !defined(CONFIG_NSH_NETINIT_THREAD) || !defined(CONFIG_ARCH_PHY_INTERRUPT) || \
     !defined(CONFIG_NETDEV_PHY_IOCTL) || !defined(CONFIG_NET_UDP) || \
      defined(CONFIG_DISABLE_SIGNALS)
@@ -159,7 +155,7 @@
  * domain sockets were enable.
  */
 
-#if !defined(CONFIG_NET_ETHERNET) && !defined(CONFIG_NET_SLIP)
+#if !defined(CONFIG_NET_ETHERNET) && !defined(CONFIG_NET_SLIP) && !defined(CONFIG_NET_TUN)
   /* No link layer protocol is a good indication that there is no network
    * device.
    */
@@ -772,14 +768,9 @@ int nsh_loginscript(FAR struct nsh_vtbl_s *vtbl);
 
 /* Architecture-specific initialization */
 
-#ifdef CONFIG_NSH_ARCHINIT
-int nsh_archinitialize(void);
-#else
-#  define nsh_archinitialize() (-ENOSYS)
-#endif
-
-#ifdef CONFIG_NSH_ARCHMAC
-int nsh_arch_macaddress(uint8_t *mac);
+#if defined(CONFIG_NSH_ARCHINIT) && !defined(CONFIG_LIB_BOARDCTL)
+#  warning CONFIG_NSH_ARCHINIT is set, but CONFIG_LIB_BOARDCTL is not
+#  undef CONFIG_NSH_ARCHINIT
 #endif
 
 /* Basic session and message handling */
@@ -857,7 +848,7 @@ void nsh_usbtrace(void);
   int cmd_lbracket(FAR struct nsh_vtbl_s *vtbl, int argc, char **argv);
 #endif
 
-#if defined (CONFIG_RTC) && !defined(CONFIG_NSH_DISABLE_DATE)
+#ifndef CONFIG_NSH_DISABLE_DATE
   int cmd_date(FAR struct nsh_vtbl_s *vtbl, int argc, char **argv);
 #endif
 

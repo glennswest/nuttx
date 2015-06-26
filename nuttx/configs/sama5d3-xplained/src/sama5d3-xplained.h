@@ -382,26 +382,33 @@
  *
  *   PIO  Signal Name Function
  *   ---- ----------- -------------------------------------------------------
- *   PE4  EN5V_USBB   VBus power enable (via MN3 AIC1526 Dual USB High-Side
- *                    Power Switch).  To the A1 pin of J7 Dual USB A
- *                    connector
+ *   PE3  EN5V_USBB   VBus power enable via MN3 SP2526A-2E dual power
+ *                    switch.  PE3 (EN5V_USBB)connects to ENB pin of MN3.
+ *                    MN3 OUTB (5V_USBB) is provided to pin 5 of J7 Dual USB
+ *                    A connector
+ *
+ *                    Active high for SP2526A-1; active low for SP2526A-2
  */
 
 #define PIO_USBB_VBUS_ENABLE \
-                     (PIO_OUTPUT | PIO_CFG_DEFAULT | PIO_OUTPUT_CLEAR | \
-                      PIO_PORT_PIOE | PIO_PIN4)
+                     (PIO_OUTPUT | PIO_CFG_DEFAULT | PIO_OUTPUT_SET | \
+                      PIO_PORT_PIOE | PIO_PIN3)
 
 /* Port C
  *
  *   PIO  Signal Name Function
  *   ---- ----------- -------------------------------------------------------
- *   PE3  EN5V_USBC   VBus power enable (via MN3 power switch).  To the B1
- *                    pin of J7 Dual USB A connector
+ *   PE4  EN5V_USBC   VBus power enable via MN3 SP2526A-2E dual power
+ *                    switch.  PE4 (EN5V_USBC) connects to ENA pin of the
+ *                    MN3. MN3 OUTA (5V_USBC) is provided to the pin 1 of J7
+ *                    Dual USB A connector
+ *
+ *                    Active high for SP2526A-1; active low for SP2526A-2
  */
 
 #define PIO_USBC_VBUS_ENABLE \
-                     (PIO_OUTPUT | PIO_CFG_DEFAULT | PIO_OUTPUT_CLEAR | \
-                      PIO_PORT_PIOE | PIO_PIN3)
+                     (PIO_OUTPUT | PIO_CFG_DEFAULT | PIO_OUTPUT_SET | \
+                      PIO_PORT_PIOE | PIO_PIN4)
 
 /*  Both Ports B and C
  *
@@ -731,24 +738,6 @@ int sam_usbhost_initialize(void);
 
 #ifdef HAVE_NETWORK
 void weak_function sam_netinitialize(void);
-#endif
-
-/************************************************************************************
- * Name: nsh_archinitialize
- *
- * Description:
- *   Perform architecture specific initialization for NSH.
- *
- *   CONFIG_NSH_ARCHINIT=y :
- *     Called from the NSH library
- *
- *   CONFIG_BOARD_INITIALIZE=y, CONFIG_NSH_LIBRARY=y, && CONFIG_NSH_ARCHINIT=n :
- *     Called from board_initialize().
- *
- ************************************************************************************/
-
-#ifdef CONFIG_NSH_LIBRARY
-int nsh_archinitialize(void);
 #endif
 
 /************************************************************************************

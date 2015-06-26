@@ -285,6 +285,10 @@ configs/lm4f120-launchpad
   platform for ARM® Cortex™-M4F-based microcontrollers from Texas
   Instruments.
 
+configs/lpcxpresso-lpc1115
+  NuttX board support for the Embedded Artists LPCXpresso LPC1115 board
+  featuring the NXP LPC1115 MCU.
+
 configs/lpcxpresso-lpc1768
   Embedded Artists base board with NXP LPCExpresso LPC1768.  This board
   is based on the NXP LPC1768.  The Code Red toolchain is used by default.
@@ -598,10 +602,15 @@ configs/sure-pic32mx
   http://www.sureelectronics.net/goods.php?id=1168 for further
   information about the Sure DB-DP11215 board.
 
-configs/teensy
+configs/teensy-2.0
   This is the port of NuttX to the PJRC Teensy++ 2.0 board.  This board is
   developed by http://pjrc.com/teensy/.  The Teensy++ 2.0 is based
   on an Atmel AT90USB1286 MCU.
+
+configs/teensy-lc
+  This is the port of nuttx for the Teensy LC board.  The Teensy LC
+  is a DIP style breakout board for the MKL25Z64 and comes with a USB
+  based bootloader.
 
 configs/tm4c123g-launchpad
   This is the port of NuttX to the Tiva® TM4C123G LaunchPad.  The

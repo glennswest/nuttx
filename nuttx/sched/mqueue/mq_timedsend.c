@@ -92,7 +92,7 @@
  *
  ****************************************************************************/
 
-static void mq_sndtimeout(int argc, uint32_t pid)
+static void mq_sndtimeout(int argc, wdparm_t pid)
 {
   FAR struct tcb_s *wtcb;
   irqstate_t saved_state;
@@ -351,7 +351,8 @@ errout_with_irqsave:
 
 errout_with_mqmsg:
   mq_msgfree(mqmsg);
-  set_errno(result);
   sched_unlock();
+
+  set_errno(result);
   return ERROR;
 }

@@ -51,7 +51,7 @@
 #endif
 
 /************************************************************************************
- * Definitions
+ * Pre-processor Definitions
  ************************************************************************************/
 
 /* Clocking *************************************************************************/
@@ -191,7 +191,7 @@
 
 /* Thus if LED L is statically on, NuttX has successfully booted and is,
  * apparently, running normmally.  If LED RX is glowing, then NuttX is
- * handling interupts (and also signals and assertions).  If TX is flashing
+ * handling interrupts (and also signals and assertions).  If TX is flashing
  * at approximately 2Hz, then a fatal error has been detected and the system
  */
 
@@ -200,7 +200,7 @@
 
 /* GPIO pin configurations **********************************************************/
 
-#if 1 /* #ifdef CONFIG_ADRUINO_DUE_REV3 works with REV2 as well */
+#if 1 /* #ifdef CONFIG_ARDUINO_DUE_REV3 works with REV2 as well */
 /* This port was performed on the Arduino Due Rev 2 board.  A NuttX user reported
  * issues with the serial port on his Aduino Due Rev 3 board.  That problem was
  * resolved as follows:

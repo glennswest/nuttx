@@ -167,9 +167,17 @@ void cancel_test(void);
 
 void timedwait_test(void);
 
+/* sigprocmask.c ****************************************************************/
+
+void sigprocmask_test(void);
+
 /* sighand.c ****************************************************************/
 
 void sighand_test(void);
+
+/* signest.c ****************************************************************/
+
+void signest_test(void);
 
 /* posixtimers.c ************************************************************/
 

@@ -125,6 +125,7 @@
 #include <debug.h>
 
 #include <nuttx/arch.h>
+#include <nuttx/board.h>
 #include <nuttx/lcd/lcd.h>
 #include <nuttx/lcd/ili9341.h>
 #include <nuttx/video/rgbcolors.h>
@@ -175,19 +176,19 @@
 /* Check orientation */
 
 #if defined(CONFIG_LCD_LANDSCAPE)
-#  if defined(CONFIG_LCD_PORTAIT) || defined(CONFIG_LCD_RPORTAIT) || \
+#  if defined(CONFIG_LCD_PORTRAIT) || defined(CONFIG_LCD_RPORTRAIT) || \
       defined(CONFIG_LCD_RLANDSCAPE)
 #    error "Cannot define both portrait and any other orientations"
 #  endif
 #elif defined(CONFIG_LCD_RLANDSCAPE)
-#  if defined(CONFIG_LCD_PORTAIT) || defined(CONFIG_LCD_RPORTAIT)
+#  if defined(CONFIG_LCD_PORTRAIT) || defined(CONFIG_LCD_RPORTRAIT)
 #    error "Cannot define both rportrait and any other orientations"
 #  endif
-#elif defined(CONFIG_LCD_PORTAIT)
-#  ifdef CONFIG_LCD_RPORTAIT
+#elif defined(CONFIG_LCD_PORTRAIT)
+#  ifdef CONFIG_LCD_RPORTRAIT
 #    error "Cannot define both landscape and any other orientations"
 #  endif
-#elif !defined(CONFIG_LCD_RPORTAIT)
+#elif !defined(CONFIG_LCD_RPORTRAIT)
 #  define CONFIG_LCD_LANDSCAPE 1
 #endif
 
@@ -1183,7 +1184,7 @@ static inline int sam_lcd_initialize(void)
  ************************************************************************************/
 
 /************************************************************************************
- * Name:  up_lcdinitialize
+ * Name:  board_lcd_initialize
  *
  * Description:
  *   Initialize the LCD video hardware.  The initial state of the LCD is fully
@@ -1192,7 +1193,7 @@ static inline int sam_lcd_initialize(void)
  *
  ************************************************************************************/
 
-int up_lcdinitialize(void)
+int board_lcd_initialize(void)
 {
   FAR struct sam_dev_s *priv = &g_lcddev;
   int ret;
@@ -1230,7 +1231,7 @@ int up_lcdinitialize(void)
 }
 
 /************************************************************************************
- * Name: up_lcdgetdev
+ * Name: board_lcd_getdev
  *
  * Description:
  *   Return a a reference to the LCD object for the specified LCD.  This allows
@@ -1238,21 +1239,21 @@ int up_lcdinitialize(void)
  *
  ************************************************************************************/
 
-FAR struct lcd_dev_s *up_lcdgetdev(int lcddev)
+FAR struct lcd_dev_s *board_lcd_getdev(int lcddev)
 {
   DEBUGASSERT(lcddev == 0);
   return &g_lcddev.dev;
 }
 
 /************************************************************************************
- * Name:  up_lcduninitialize
+ * Name:  board_lcd_uninitialize
  *
  * Description:
  *   Uninitialize the LCD support
  *
  ************************************************************************************/
 
-void up_lcduninitialize(void)
+void board_lcd_uninitialize(void)
 {
   FAR struct sam_dev_s *priv = &g_lcddev;
 

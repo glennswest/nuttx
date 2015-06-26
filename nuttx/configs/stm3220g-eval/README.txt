@@ -323,7 +323,7 @@ events as follows:
   * If LED1, LED2, LED3 are statically on, then NuttX probably failed to boot
     and these LEDs will give you some indication of where the failure was
  ** The normal state is LED3 ON and LED1 faintly glowing.  This faint glow
-    is because of timer interupts that result in the LED being illuminated
+    is because of timer interrupts that result in the LED being illuminated
     on a small proportion of the time.
 *** LED2 may also flicker normally if signals are processed.
 
@@ -917,7 +917,7 @@ Where <subdir> is one of the following:
        must be manually enabled by selecting:
 
        CONFIG_CAN=y             : Enable the generic CAN infrastructure
-       CONFIG_CAN_EXID=y or n   : Enable to support extended ID frames
+       CONFIG_CAN_EXTID=y or n  : Enable to support extended ID frames
        CONFIG_STM32_CAN1=y      : Enable CAN1
        CONFIG_CAN_LOOPBACK=y    : Enable CAN loopback mode
 

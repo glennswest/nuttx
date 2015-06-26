@@ -53,7 +53,7 @@
 #include "libelf.h"
 
 /****************************************************************************
- * Pre-Processor Definitions
+ * Pre-processor Definitions
  ****************************************************************************/
 
 /* CONFIG_DEBUG, CONFIG_DEBUG_VERBOSE, and CONFIG_DEBUG_BINFMT have to be
@@ -102,7 +102,7 @@ static inline int elf_filelen(FAR struct elf_loadinfo_s *loadinfo,
   if (ret < 0)
     {
       int errval = errno;
-      bdbg("Failed to fstat file: %d\n", errval);
+      bdbg("Failed to stat file: %d\n", errval);
       return -errval;
     }
 

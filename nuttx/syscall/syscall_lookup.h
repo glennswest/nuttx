@@ -180,6 +180,12 @@ SYSCALL_LOOKUP(up_assert,                 2, STUB_up_assert)
 #  endif
 #endif
 
+/* Board support */
+
+#ifdef CONFIG_LIB_BOARDCTL
+  SYSCALL_LOOKUP(boardctl,                2, STUB_boardctl)
+#endif
+
 /* The following are defined if file descriptors are enabled */
 
 #if CONFIG_NFILE_DESCRIPTORS > 0
@@ -260,7 +266,7 @@ SYSCALL_LOOKUP(up_assert,                 2, STUB_up_assert)
   SYSCALL_LOOKUP(pthread_setschedprio,    2, STUB_pthread_setschedprio)
   SYSCALL_LOOKUP(pthread_setspecific,     2, STUB_pthread_setspecific)
   SYSCALL_LOOKUP(pthread_yield,           0, STUB_pthread_yield)
-#  ifndef CONFIG_DISABLE_SIGNAL
+#  ifndef CONFIG_DISABLE_SIGNALS
   SYSCALL_LOOKUP(pthread_cond_timedwait,  3, STUB_pthread_cond_timedwait)
   SYSCALL_LOOKUP(pthread_kill,            2, STUB_pthread_kill)
   SYSCALL_LOOKUP(pthread_sigmask,         3, STUB_pthread_sigmask)
@@ -271,10 +277,12 @@ SYSCALL_LOOKUP(up_assert,                 2, STUB_up_assert)
 
 #ifndef CONFIG_DISABLE_MQUEUE
   SYSCALL_LOOKUP(mq_close,                1, STUB_mq_close)
+  SYSCALL_LOOKUP(mq_getattr,              2, STUB_mq_getattr)
   SYSCALL_LOOKUP(mq_notify,               2, STUB_mq_notify)
   SYSCALL_LOOKUP(mq_open,                 6, STUB_mq_open)
   SYSCALL_LOOKUP(mq_receive,              4, STUB_mq_receive)
   SYSCALL_LOOKUP(mq_send,                 4, STUB_mq_send)
+  SYSCALL_LOOKUP(mq_setattr,              3, STUB_mq_setattr)
   SYSCALL_LOOKUP(mq_timedreceive,         5, STUB_mq_timedreceive)
   SYSCALL_LOOKUP(mq_timedsend,            5, STUB_mq_timedsend)
   SYSCALL_LOOKUP(mq_unlink,               1, STUB_mq_unlink)

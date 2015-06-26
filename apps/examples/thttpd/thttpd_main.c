@@ -59,13 +59,25 @@
 
 #include <nuttx/fs/ramdisk.h>
 #include <nuttx/binfmt/binfmt.h>
-#include <nuttx/binfmt/nxflat.h>
+
+#ifdef CONFIG_THTTPD_NXFLAT
+#  include <nuttx/binfmt/nxflat.h>
+#endif
+
+#ifdef CONFIG_THTTPD_BINFS
+#  include <nuttx/fs/unionfs.h>
+#  include <nuttx/binfmt/builtin.h>
+#endif
+
 #ifdef CONFIG_NET_SLIP
 #  include <nuttx/net/net.h>
 #endif
 
 #include "content/romfs.h"
-#include "content/symtab.h"
+
+#ifdef CONFIG_THTTPD_NXFLAT
+#  include "content/symtab.h"
+#endif
 
 /****************************************************************************
  * Definitions
@@ -79,27 +91,42 @@
 #  error "You must provide file descriptors via CONFIG_NFILE_DESCRIPTORS in your configuration file"
 #endif
 
-#ifndef CONFIG_NXFLAT
-#  error "You must select CONFIG_NXFLAT in your configuration file"
-#endif
-
-#ifndef CONFIG_FS_ROMFS
-#  error "You must select CONFIG_FS_ROMFS in your configuration file"
-#endif
-
-#ifdef CONFIG_DISABLE_MOUNTPOINT
-#  error "You must not disable mountpoints via CONFIG_DISABLE_MOUNTPOINT in your configuration file"
-#endif
-
 #ifdef CONFIG_BINFMT_DISABLE
 #  error "You must not disable loadable modules via CONFIG_BINFMT_DISABLE in your configuration file"
+#endif
+
+#ifdef CONFIG_THTTPD_NXFLAT
+#  ifndef CONFIG_NXFLAT
+#    error "You must select CONFIG_NXFLAT in your configuration file"
+#  endif
+
+#  ifndef CONFIG_FS_ROMFS
+#    error "You must select CONFIG_FS_ROMFS in your configuration file"
+#  endif
+
+#  ifdef CONFIG_DISABLE_MOUNTPOINT
+#    error "You must not disable mountpoints via CONFIG_DISABLE_MOUNTPOINT in your configuration file"
+#  endif
+#endif
+
+#ifdef CONFIG_THTTPD_BINFS
+#  ifndef CONFIG_BUILTIN
+#    error "You must select CONFIG_BUILTIN=y in your configuration file"
+#  endif
+
+#  ifndef CONFIG_FS_BINFS
+#    error "You must select CONFIG_FS_BINFS=y in your configuration file"
+#  endif
+
+#  ifndef CONFIG_FS_UNIONFS
+#    error "CONFIG_FS_UNIONFS=y is required in this configuration"
+#  endif
 #endif
 
 /* Ethernet specific configuration */
 
 #ifdef CONFIG_NET_ETHERNET
-
-   /* Otherwise, use the standard Ethernet device name */
+   /* Use the standard Ethernet device name */
 
 #  define NET_DEVNAME "eth0"
 
@@ -129,10 +156,19 @@
 
 /* Describe the ROMFS file system */
 
-#define SECTORSIZE   512
+#define SECTORSIZE   64
 #define NSECTORS(b)  (((b)+SECTORSIZE-1)/SECTORSIZE)
 #define ROMFSDEV     "/dev/ram0"
-#define MOUNTPT      CONFIG_THTTPD_PATH
+
+#ifdef CONFIG_THTTPD_BINFS
+#  define ROMFS_MOUNTPT      "/mnt/tmp1"
+#  define ROMFS_PREFIX       NULL
+#  define BINFS_MOUNTPT      "/mnt/tmp2"
+#  define BINFS_PREFIX       "cgi-bin"
+#  define UNIONFS_MOUNTPT    CONFIG_THTTPD_PATH
+#else
+#  define ROMFS_MOUNTPT      CONFIG_THTTPD_PATH
+#endif
 
 /****************************************************************************
  * Private Data
@@ -142,6 +178,7 @@
  * Public Data
  ****************************************************************************/
 
+#ifdef CONFIG_THTTPD_NXFLAT
 /* These values must be provided by the user before the THTTPD task daemon
  * is started:
  *
@@ -153,6 +190,7 @@
 
 FAR const struct symtab_s *g_thttpdsymtab;
 int                         g_thttpdnsymbols;
+#endif
 
 /****************************************************************************
  * Public Functions
@@ -216,6 +254,7 @@ int thttp_main(int argc, char *argv[])
   addr.s_addr = HTONL(CONFIG_EXAMPLES_THTTPD_NETMASK);
   netlib_set_ipv4netmask(NET_DEVNAME, &addr);
 
+#ifdef CONFIG_THTTPD_NXFLAT
   /* Initialize the NXFLAT binary loader */
 
   printf("Initializing the NXFLAT binary loader\n");
@@ -225,35 +264,77 @@ int thttp_main(int argc, char *argv[])
       printf("ERROR: Initialization of the NXFLAT loader failed: %d\n", ret);
       exit(2);
     }
+#endif
 
   /* Create a ROM disk for the ROMFS filesystem */
 
   printf("Registering romdisk\n");
+
   ret = romdisk_register(0, (uint8_t*)romfs_img, NSECTORS(romfs_img_len), SECTORSIZE);
   if (ret < 0)
     {
       printf("ERROR: romdisk_register failed: %d\n", ret);
+#ifdef CONFIG_THTTPD_NXFLAT
       nxflat_uninitialize();
+#endif
       exit(1);
     }
 
-  /* Mount the file system */
+  /* Mount the ROMFS file system */
 
   printf("Mounting ROMFS filesystem at target=%s with source=%s\n",
-         MOUNTPT, ROMFSDEV);
+         ROMFS_MOUNTPT, ROMFSDEV);
 
-  ret = mount(ROMFSDEV, MOUNTPT, "romfs", MS_RDONLY, NULL);
+  ret = mount(ROMFSDEV, ROMFS_MOUNTPT, "romfs", MS_RDONLY, NULL);
   if (ret < 0)
     {
-      printf("ERROR: mount(%s,%s,romfs) failed: %s\n",
-             ROMFSDEV, MOUNTPT, errno);
+      printf("ERROR: mount(%s,%s,romfs) failed: %d\n",
+             ROMFSDEV, ROMFS_MOUNTPT, errno);
+#ifdef CONFIG_THTTPD_NXFLAT
       nxflat_uninitialize();
+#endif
     }
+
+#ifdef CONFIG_THTTPD_BINFS
+  /* Initialize the BINFS binary loader */
+
+  printf("Initializing the Built-In binary loader\n");
+
+  ret = builtin_initialize();
+  if (ret < 0)
+    {
+      printf("ERROR: Initialization of the Built-In loader failed: %d\n", ret);
+      exit(2);
+    }
+
+  /* Mount the BINFS file system */
+
+  printf("Mounting BINFS filesystem at %s\n", BINFS_MOUNTPT);
+
+  ret = mount(NULL, BINFS_MOUNTPT, "binfs", MS_RDONLY, NULL);
+  if (ret < 0)
+    {
+      printf("ERROR: mount(NULL,%s,binfs) failed: %d\n", BINFS_MOUNTPT, errno);
+    }
+
+  /* Now create and mount the union file system */
+
+  printf("Creating UNIONFS filesystem at %s\n", UNIONFS_MOUNTPT);
+
+  ret = unionfs_mount(ROMFS_MOUNTPT, ROMFS_PREFIX, BINFS_MOUNTPT, BINFS_PREFIX,
+                      UNIONFS_MOUNTPT);
+  if (ret < 0)
+    {
+      printf("ERROR: Failed to create the union file system at %s: %d\n", UNIONFS_MOUNTPT, ret);
+    }
+#endif
 
   /* Start THTTPD.  At present, symbol table info is passed via global variables */
 
+#ifdef CONFIG_THTTPD_NXFLAT
   g_thttpdsymtab   = exports;
   g_thttpdnsymbols = NEXPORTS;
+#endif
 
   printf("Starting THTTPD\n");
   fflush(stdout);
