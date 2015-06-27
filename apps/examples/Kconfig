@@ -3,6 +3,7 @@
 # see misc/tools/kconfig-language.txt.
 #
 
+source "$APPSDIR/examples/smx/Kconfig"
 source "$APPSDIR/examples/adc/Kconfig"
 source "$APPSDIR/examples/ajoystick/Kconfig"
 source "$APPSDIR/examples/bastest/Kconfig"

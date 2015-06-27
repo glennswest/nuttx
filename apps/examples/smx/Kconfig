@@ -1,0 +1,21 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+config EXAMPLES_SMX
+	bool "SMX 3d Printer Controller"
+	default y
+	---help---
+		Enable the SMX 3d Printer Controller
+
+if EXAMPLES_SMX
+
+config EXAMPLES_SMX_PROGNAME
+	string "Program name"
+	default "smx"
+	depends on BUILD_KERNEL
+	---help---
+		This is the mai smx 3d printr controller
+
+endif
