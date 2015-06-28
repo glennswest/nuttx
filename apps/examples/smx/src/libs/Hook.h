@@ -1,6 +1,7 @@
 #ifndef HOOK_H
 #define HOOK_H
-#include "libs/FPointer.h"
+//#include "libs/FPointer.h"
+#include "FPointer.h"
 
 // Hook is just a glorified FPointer
 

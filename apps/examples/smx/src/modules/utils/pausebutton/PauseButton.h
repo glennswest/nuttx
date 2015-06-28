@@ -1,7 +1,8 @@
 #ifndef PAUSEBUTTON_H
 #define PAUSEBUTTON_H
 
-#include "libs/Pin.h"
+//#include "libs/Pin.h"
+#include "Pin.h"
 
 class PauseButton : public Module {
     public:

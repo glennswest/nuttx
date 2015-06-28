@@ -8,7 +8,7 @@
 #ifndef LASER_MODULE_H
 #define LASER_MODULE_H
 
-#include "libs/Module.h"
+#include "../../../libs/Module.h"
 
 namespace mbed {
     class PwmOut;

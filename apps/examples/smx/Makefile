@@ -11,14 +11,14 @@ STACKSIZE = 8192
 # smx
 
 ASRCS =
-CSRCS =
-MAINSRC = smx_main.c
+CSRCS = 
+MAINSRC = smx_main.c 
 
 AOBJS = $(ASRCS:.S=$(OBJEXT))
 COBJS = $(CSRCS:.c=$(OBJEXT))
 MAINOBJ = $(MAINSRC:.c=$(OBJEXT))
 
-SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
+SRCS = $(ASRCS) $(CSRCS) $(MAINSRC) 
 OBJS = $(AOBJS) $(COBJS)
 
 ifneq ($(CONFIG_BUILD_KERNEL),y)
@@ -55,6 +55,9 @@ all: .built
 
 $(AOBJS): %$(OBJEXT): %.S
 	$(call ASSEMBLE, $<, $@)
+
+$(COBJS) $(MAINOBJ): %$(OBJEXT): %.cpp
+	$(call COMPILE, $<, $@)
 
 $(COBJS) $(MAINOBJ): %$(OBJEXT): %.c
 	$(call COMPILE, $<, $@)

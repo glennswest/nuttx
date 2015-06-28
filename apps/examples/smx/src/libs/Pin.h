@@ -5,8 +5,10 @@
 #include <stdio.h>
 #include <string>
 
-#include "libs/LPC17xx/sLPC17xx.h" // smoothed mbed.h lib
-#include "PinNames.h"
+// GSW - Not Running on LPC Anymore -- #include "libs/LPC17xx/sLPC17xx.h" // smoothed mbed.h lib
+//#ifndef PINNAMES_H
+//#include "PinNames.h"
+//#endif
 
 namespace mbed {
     class PwmOut;

@@ -8,7 +8,7 @@
 #ifndef CONVEYOR_H
 #define CONVEYOR_H
 
-#include "libs/Module.h"
+#include "Module.h"
 #include "HeapRing.h"
 
 using namespace std;

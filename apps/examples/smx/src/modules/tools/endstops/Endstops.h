@@ -8,8 +8,8 @@
 #ifndef ENDSTOPS_MODULE_H
 #define ENDSTOPS_MODULE_H
 
-#include "libs/Module.h"
-#include "libs/Pin.h"
+#include "../../../libs/Module.h"
+#include "../../../libs/Pin.h"
 
 #include <bitset>
 

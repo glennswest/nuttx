@@ -18,7 +18,8 @@ Author: Michael Hackney, mhackney@eclecticangler.com
 
 using namespace std;
 
-#include "libs/Module.h"
+// gsw #include "libs/Module.h"
+#include "Module.h"
 #include <string>
 #include <vector>
 

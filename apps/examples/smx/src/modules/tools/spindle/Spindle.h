@@ -8,7 +8,7 @@
 #ifndef SPINDLE_MODULE_H
 #define SPINDLE_MODULE_H
 
-#include "libs/Module.h"
+#include "../../../libs/Module.h"
 #include <stdint.h>
 
 namespace mbed {

@@ -1,0 +1,240 @@
+/Users/gwest/3dprinter/nuttx/apps/examples/smx/src/../../../../nuttx
+arm-none-eabi-
+arm-none-eabi-c++ -o smxengine.o smxengine.cpp -std=c++11 -fpermissive -I/Users/gwest/3dprinter/nuttx/apps/examples/smx/src/../../../../nuttx/include -I/Users/gwest/3dprinter/nuttx/apps/examples/smx/src/../../../../nuttx/arch/arm/src/sam34/ -I/Users/gwest/3dprinter/nuttx/apps/examples/smx/src/../../../../nuttx/../apps/examples/smx/src/libs
+In file included from /Users/gwest/3dprinter/nuttx/apps/examples/smx/src/../../../../nuttx/include/stdio.h:45:0,
+                 from /Users/gwest/3dprinter/nuttx/apps/examples/smx/src/../../../../nuttx/include/wchar.h:50,
+                 from smxengine.cpp:10:
+/Users/gwest/3dprinter/nuttx/apps/examples/smx/src/../../../../nuttx/include/sys/types.h:198:22: warning: redeclaration of C++ built-in type 'wchar_t' [-fpermissive]
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/stl_algobase.h:62:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:41,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:42,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/cpp_type_traits.h:168:12: error: redefinition of 'struct std::__is_integer<unsigned char>'
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/cpp_type_traits.h:147:12: error: previous definition of 'struct std::__is_integer<unsigned char>'
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/move.h:57:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/stl_pair.h:61,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/stl_algobase.h:65,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:41,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:42,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/type_traits:173:12: error: redefinition of 'struct std::__is_integral_helper<unsigned char>'
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/type_traits:161:12: error: previous definition of 'struct std::__is_integral_helper<unsigned char>'
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:42:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:42,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:42,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:66:11: error: '::mbstate_t' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:143:11: error: '::btowc' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:144:11: error: '::fgetwc' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:145:11: error: '::fgetws' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:146:11: error: '::fputwc' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:147:11: error: '::fputws' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:148:11: error: '::fwide' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:149:11: error: '::fwprintf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:150:11: error: '::fwscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:151:11: error: '::getwc' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:152:11: error: '::getwchar' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:153:11: error: '::mbrlen' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:154:11: error: '::mbrtowc' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:155:11: error: '::mbsinit' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:156:11: error: '::mbsrtowcs' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:157:11: error: '::putwc' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:158:11: error: '::putwchar' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:160:11: error: '::swprintf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:162:11: error: '::swscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:163:11: error: '::ungetwc' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:164:11: error: '::vfwprintf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:166:11: error: '::vfwscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:169:11: error: '::vswprintf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:172:11: error: '::vswscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:174:11: error: '::vwprintf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:176:11: error: '::vwscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:178:11: error: '::wcrtomb' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:179:11: error: '::wcscat' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:180:11: error: '::wcscmp' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:181:11: error: '::wcscoll' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:182:11: error: '::wcscpy' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:183:11: error: '::wcscspn' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:184:11: error: '::wcsftime' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:185:11: error: '::wcslen' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:186:11: error: '::wcsncat' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:187:11: error: '::wcsncmp' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:188:11: error: '::wcsncpy' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:189:11: error: '::wcsrtombs' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:190:11: error: '::wcsspn' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:191:11: error: '::wcstod' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:193:11: error: '::wcstof' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:195:11: error: '::wcstok' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:196:11: error: '::wcstol' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:197:11: error: '::wcstoul' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:198:11: error: '::wcsxfrm' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:199:11: error: '::wctob' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:200:11: error: '::wmemcmp' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:201:11: error: '::wmemcpy' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:202:11: error: '::wmemmove' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:203:11: error: '::wmemset' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:204:11: error: '::wprintf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:205:11: error: '::wscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:206:11: error: '::wcschr' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:207:11: error: '::wcspbrk' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:208:11: error: '::wcsrchr' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:209:11: error: '::wcsstr' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:210:11: error: '::wmemchr' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:282:14: error: 'std::wcstof' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:285:14: error: 'std::vfwscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:288:14: error: 'std::vswscanf' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cwchar:291:14: error: 'std::vwscanf' has not been declared
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:42:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:42,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:230:16: error: 'mbstate_t' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:230:25: error: template argument 1 is invalid
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:230:36: error: invalid type in declaration before ';' token
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:232:16: error: 'mbstate_t' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:232:25: error: template argument 1 is invalid
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:232:37: error: invalid type in declaration before ';' token
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:236:16: error: 'mbstate_t' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:236:25: error: template argument 1 is invalid
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:236:39: error: invalid type in declaration before ';' token
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:238:16: error: 'mbstate_t' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:238:25: error: template argument 1 is invalid
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/postypes.h:238:39: error: invalid type in declaration before ';' token
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:42:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:65:15: error: 'mbstate_t' in namespace 'std' does not name a type
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:241:15: error: 'mbstate_t' does not name a type
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:312:15: error: 'mbstate_t' does not name a type
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h: In static member function 'static int std::char_traits<wchar_t>::compare(const char_type*, const char_type*, std::size_t)':
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:328:39: error: 'wmemcmp' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h: In static member function 'static std::size_t std::char_traits<wchar_t>::length(const char_type*)':
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:332:26: error: 'wcslen' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h: In static member function 'static std::char_traits<wchar_t>::char_type* std::char_traits<wchar_t>::move(std::char_traits<wchar_t>::char_type*, const char_type*, std::size_t)':
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:340:40: error: 'wmemmove' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h: In static member function 'static std::char_traits<wchar_t>::char_type* std::char_traits<wchar_t>::copy(std::char_traits<wchar_t>::char_type*, const char_type*, std::size_t)':
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:344:39: error: 'wmemcpy' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h: In static member function 'static std::char_traits<wchar_t>::char_type* std::char_traits<wchar_t>::assign(std::char_traits<wchar_t>::char_type*, std::size_t, std::char_traits<wchar_t>::char_type)':
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:348:37: error: 'wmemset' was not declared in this scope
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:42:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h: At global scope:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:391:15: error: 'mbstate_t' does not name a type
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/char_traits.h:484:15: error: 'mbstate_t' does not name a type
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/localefwd.h:44:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:45,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:66:11: error: '::isalnum' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:67:11: error: '::isalpha' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:68:11: error: '::iscntrl' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:69:11: error: '::isdigit' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:70:11: error: '::isgraph' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:71:11: error: '::islower' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:72:11: error: '::isprint' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:73:11: error: '::ispunct' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:74:11: error: '::isspace' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:75:11: error: '::isupper' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:76:11: error: '::isxdigit' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:77:11: error: '::tolower' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:78:11: error: '::toupper' has not been declared
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/cctype:89:11: error: '::isblank' has not been declared
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:45:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/localefwd.h:135:40: error: 'mbstate_t' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/localefwd.h:135:49: error: template argument 3 is invalid
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/localefwd.h:137:43: error: 'mbstate_t' was not declared in this scope
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/localefwd.h:137:52: error: template argument 3 is invalid
+In file included from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/basic_string.h:3030:0,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/string:54,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/stdexcept:40,
+                 from /usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/array:39,
+                 from libs/Kernel.h:14,
+                 from smxengine.cpp:12:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/functional_hash.h:94:3: error: redefinition of 'struct std::hash<unsigned char>'
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/bits/functional_hash.h:85:3: error: previous definition of 'struct std::hash<unsigned char>'
+In file included from modules/tools/endstops/Endstops.h:12:0,
+                 from smxengine.cpp:18:
+modules/tools/endstops/../../../libs/Pin.h:73:9: error: 'LPC_GPIO_TypeDef' does not name a type
+modules/tools/endstops/../../../libs/Pin.h: In member function '_Bool8 Pin::equals(const Pin&) const':
+modules/tools/endstops/../../../libs/Pin.h:29:55: error: 'const class Pin' has no member named 'port'
+modules/tools/endstops/../../../libs/Pin.h:29:69: error: 'const class Pin' has no member named 'port'
+modules/tools/endstops/../../../libs/Pin.h: In member function 'Pin* Pin::as_output()':
+modules/tools/endstops/../../../libs/Pin.h:34:23: error: 'class Pin' has no member named 'port'
+modules/tools/endstops/../../../libs/Pin.h: In member function 'Pin* Pin::as_input()':
+modules/tools/endstops/../../../libs/Pin.h:40:23: error: 'class Pin' has no member named 'port'
+modules/tools/endstops/../../../libs/Pin.h: In member function '_Bool8 Pin::get()':
+modules/tools/endstops/../../../libs/Pin.h:56:47: error: 'class Pin' has no member named 'port'
+modules/tools/endstops/../../../libs/Pin.h: In member function 'void Pin::set(_Bool8)':
+modules/tools/endstops/../../../libs/Pin.h:63:23: error: 'class Pin' has no member named 'port'
+modules/tools/endstops/../../../libs/Pin.h:65:23: error: 'class Pin' has no member named 'port'
+In file included from modules/tools/filamentdetector/FilamentDetector.h:7:0,
+                 from smxengine.cpp:24:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/atomic: At global scope:
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/atomic:534:12: error: redefinition of 'struct std::atomic<unsigned char>'
+/usr/local/Cellar/gcc-arm-none-eabi/20140408/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/include/c++/4.7.4/atomic:477:12: error: previous definition of 'struct std::atomic<unsigned char>'
+In file included from smxengine.cpp:33:0:
+modules/utils/panel/Panel.h:101:9: error: 'PinName' does not name a type
+smxengine.cpp:85:1: error: 'GPIO' does not name a type
+smxengine.cpp: In function 'void init()':
+smxengine.cpp:102:9: error: 'leds' was not declared in this scope
+smxengine.cpp:113:20: error: invalid use of incomplete type 'class StreamOutputPool'
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:25:7: error: forward declaration of 'class StreamOutputPool'
+smxengine.cpp:113:61: error: 'SystemCoreClock' was not declared in this scope
+smxengine.cpp:115:20: error: invalid use of incomplete type 'class StreamOutputPool'
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:25:7: error: forward declaration of 'class StreamOutputPool'
+smxengine.cpp:120:17: error: 'sd' was not declared in this scope
+smxengine.cpp:121:30: error: invalid use of incomplete type 'class StreamOutputPool'
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:25:7: error: forward declaration of 'class StreamOutputPool'
+smxengine.cpp:178:29: error: expected type-specifier before 'Touchprobe'
+smxengine.cpp:178:29: error: expected ')' before 'Touchprobe'
+smxengine.cpp:178:42: error: no matching function for call to 'Kernel::add_module(int*)'
+smxengine.cpp:178:42: note: candidate is:
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:41:14: note: void Kernel::add_module(Module*)
+libs/Kernel.h:41:14: note:   no known conversion for argument 1 from 'int*' to 'Module*'
+smxengine.cpp:187:29: error: expected type-specifier before 'Network'
+smxengine.cpp:187:29: error: expected ')' before 'Network'
+smxengine.cpp:187:39: error: no matching function for call to 'Kernel::add_module(int*)'
+smxengine.cpp:187:39: note: candidate is:
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:41:14: note: void Kernel::add_module(Module*)
+libs/Kernel.h:41:14: note:   no known conversion for argument 1 from 'int*' to 'Module*'
+smxengine.cpp:228:9: error: 'leds' was not declared in this scope
+smxengine.cpp:238:28: error: invalid use of incomplete type 'class StreamOutputPool'
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:25:7: error: forward declaration of 'class StreamOutputPool'
+smxengine.cpp:240:32: error: invalid use of incomplete type 'class StreamOutputPool'
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:25:7: error: forward declaration of 'class StreamOutputPool'
+smxengine.cpp:242:50: error: incomplete type 'StreamOutput' used in nested name specifier
+smxengine.cpp:245:28: error: invalid use of incomplete type 'class StreamOutputPool'
+In file included from smxengine.cpp:12:0:
+libs/Kernel.h:25:7: error: forward declaration of 'class StreamOutputPool'
+smxengine.cpp: In function 'int smx_engine()':
+smxengine.cpp:262:13: error: 'leds' was not declared in this scope
+make: *** [smxengine.o] Error 1

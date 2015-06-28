@@ -8,7 +8,7 @@
 #ifndef DRILLINGCYCLES_MODULE_H
 #define DRILLINGCYCLES_MODULE_H
 
-#include "libs/Module.h"
+#include "Module.h"
 
 class Gcode;
 

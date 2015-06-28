@@ -1,8 +1,8 @@
 #ifndef _NETWORK_H
 #define _NETWORK_H
 
-#include "timer.h"
-#include "LPC17XX_Ethernet.h"
+//#include "timer.h"
+//#include "LPC17XX_Ethernet.h"
 #include "Module.h"
 
 

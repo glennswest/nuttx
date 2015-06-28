@@ -1,8 +1,10 @@
 #ifndef _PLAYLED_H
 #define _PLAYLED_H
 
-#include "libs/Kernel.h"
-#include "libs/Pin.h"
+//#include "libs/Kernel.h"
+//#include "libs/Pin.h"
+#include "Kernel.h"
+#include "Pin.h"
 
 
 class PlayLed : public Module

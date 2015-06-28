@@ -5,6 +5,10 @@
       You should have received a copy of the GNU General Public License along with Smoothie. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <nuttx/config.h>
+//#include <stdio.h>
+#include <wchar.h>
+
 #include "libs/Kernel.h"
 
 #include "modules/tools/laser/Laser.h"
@@ -17,7 +21,7 @@
 #include "modules/tools/switch/SwitchPool.h"
 #include "modules/tools/temperatureswitch/TemperatureSwitch.h"
 #include "modules/tools/drillingcycles/Drillingcycles.h"
-#include "FilamentDetector.h"
+#include "modules/tools/filamentdetector/FilamentDetector.h"
 
 #include "modules/robot/Conveyor.h"
 #include "modules/utils/simpleshell/SimpleShell.h"
@@ -27,7 +31,7 @@
 #include "modules/utils/pausebutton/PauseButton.h"
 #include "modules/utils/PlayLed/PlayLed.h"
 #include "modules/utils/panel/Panel.h"
-#include "libs/Network/uip/Network.h"
+// #include "libs/Network/uip/Network.h"
 #include "Config.h"
 #include "checksumm.h"
 #include "ConfigValue.h"
@@ -40,21 +44,21 @@
 // Debug
 #include "libs/SerialMessage.h"
 
-#include "libs/USBDevice/USB.h"
-#include "libs/USBDevice/USBMSD/USBMSD.h"
-#include "libs/USBDevice/USBMSD/SDCard.h"
-#include "libs/USBDevice/USBSerial/USBSerial.h"
-#include "libs/USBDevice/DFU.h"
-#include "libs/SDFAT.h"
-#include "StreamOutputPool.h"
-#include "ToolManager.h"
+//#include "libs/USBDevice/USB.h"
+//#include "libs/USBDevice/USBMSD/USBMSD.h"
+//#include "libs/USBDevice/USBMSD/SDCard.h"
+//#include "libs/USBDevice/USBSerial/USBSerial.h"
+//#include "libs/USBDevice/DFU.h"
+//#include "libs/SDFAT.h"
+//#include "StreamOutputPool.h"
+#include "modules/tools/toolmanager/ToolManager.h"
 
 #include "libs/Watchdog.h"
 
 #include "version.h"
-#include "system_LPC17xx.h"
+//#include "system_LPC17xx.h"
 
-#include "mbed.h"
+//#include "mbed.h"
 
 #define second_usb_serial_enable_checksum  CHECKSUM("second_usb_serial_enable")
 #define disable_msd_checksum  CHECKSUM("msd_disable")
@@ -64,19 +68,19 @@
 // Watchdog wd(5000000, WDT_MRI);
 
 // USB Stuff
-SDCard sd  __attribute__ ((section ("AHBSRAM0"))) (P0_9, P0_8, P0_7, P0_6);      // this selects SPI1 as the sdcard as it is on Smoothieboard
+//SDCard sd  __attribute__ ((section ("AHBSRAM0"))) (P0_9, P0_8, P0_7, P0_6);      // this selects SPI1 as the sdcard as it is on Smoothieboard
 //SDCard sd(P0_18, P0_17, P0_15, P0_16);  // this selects SPI0 as the sdcard
 //SDCard sd(P0_18, P0_17, P0_15, P2_8);  // this selects SPI0 as the sdcard witrh a different sd select
 
-USB u __attribute__ ((section ("AHBSRAM0")));
-USBSerial usbserial __attribute__ ((section ("AHBSRAM0"))) (&u);
-#ifndef DISABLEMSD
-USBMSD msc __attribute__ ((section ("AHBSRAM0"))) (&u, &sd);
-#else
-USBMSD *msc= NULL;
-#endif
+//USB u __attribute__ ((section ("AHBSRAM0")));
+//USBSerial usbserial __attribute__ ((section ("AHBSRAM0"))) (&u);
+//#ifndef DISABLEMSD
+//USBMSD msc __attribute__ ((section ("AHBSRAM0"))) (&u, &sd);
+//#else
+//USBMSD *msc= NULL;
+//#endif
 
-SDFAT mounter __attribute__ ((section ("AHBSRAM0"))) ("sd", &sd);
+//SDFAT mounter __attribute__ ((section ("AHBSRAM0"))) ("sd", &sd);
 
 GPIO leds[5] = {
     GPIO(P1_18),
@@ -194,16 +198,17 @@ void init() {
     #endif
 
     // Create and initialize USB stuff
-    u.init();
+    //u.init();
 
-#ifdef DISABLEMSD
-    if(sdok && msc != NULL){
-        kernel->add_module( msc );
-    }
-#else
-    kernel->add_module( &msc );
-#endif
+//#ifdef DISABLEMSD
+//    if(sdok && msc != NULL){
+//        kernel->add_module( msc );
+//    }
+//#else
+//    kernel->add_module( &msc );
+//#endif
 
+#ifdef OLDUSB
     kernel->add_module( &usbserial );
     if( kernel->config->value( second_usb_serial_enable_checksum )->by_default(false)->as_bool() ){
         kernel->add_module( new(AHB0) USBSerial(&u) );
@@ -213,6 +218,7 @@ void init() {
         kernel->add_module( new(AHB0) DFU(&u));
     }
     kernel->add_module( &u );
+#endif
 
     // clear up the config cache to save some memory
     kernel->config->config_cache_clear();
@@ -244,7 +250,7 @@ void init() {
     THEKERNEL->step_ticker->start();
 }
 
-int main()
+int smx_engine()
 {
     init();
 
